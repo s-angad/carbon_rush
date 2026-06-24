@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Leaf, Mail, Lock, Eye, EyeOff, ArrowRight, User, ShieldCheck } from "lucide-react";
+import { Leaf, Mail, Lock, Eye, EyeOff, ArrowRight, User, ShieldCheck, Loader2, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { useAuth, UserRole } from "@/lib/auth";
+import { AuthProvider, useAuth, UserRole } from "@/lib/auth";
 
-export default function LoginPage() {
+function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [role, setRole] = useState<UserRole>("user");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { signIn, signUp } = useAuth();
@@ -21,6 +22,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setLoading(true);
 
     if (isLogin) {
@@ -31,11 +33,18 @@ export default function LoginPage() {
         router.push("/dashboard");
       }
     } else {
+      if (password.length < 6) {
+        setError("Password must be at least 6 characters");
+        setLoading(false);
+        return;
+      }
       const result = await signUp(email, password, fullName, role);
       if (result.error) {
         setError(result.error);
       } else {
-        router.push("/dashboard");
+        setSuccess("Account created! Check your email for confirmation, or if auto-confirm is enabled, you'll be redirected...");
+        // Wait a second then redirect
+        setTimeout(() => router.push("/dashboard"), 1500);
       }
     }
     setLoading(false);
@@ -67,7 +76,7 @@ export default function LoginPage() {
             Building the Trust Layer for Carbon
           </h1>
           <p className="text-emerald-100/80 text-lg leading-relaxed">
-            AI-powered verification, blockchain transparency, and tokenized carbon markets for a sustainable future.
+            AI-powered verification, blockchain transparency, and tokenized carbon markets. Every account is stored securely on Supabase.
           </p>
 
           <div className="mt-10 grid grid-cols-2 gap-4">
@@ -86,7 +95,7 @@ export default function LoginPage() {
         </div>
 
         <div className="relative text-emerald-200/50 text-sm">
-          © 2025 CarbonRush AI. India&apos;s Digital Public Infrastructure for Carbon.
+          © 2025 CarbonRush AI · Powered by Supabase
         </div>
       </div>
 
@@ -105,21 +114,27 @@ export default function LoginPage() {
             {isLogin ? "Welcome back" : "Create your account"}
           </h2>
           <p className="text-gray-500 mb-8">
-            {isLogin ? "Sign in to access your dashboard" : "Get started with CarbonRush AI"}
+            {isLogin ? "Sign in with your Supabase account" : "Sign up — your account is created on Supabase"}
           </p>
 
-          {/* Demo Credentials */}
-          <div className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
-            <p className="text-sm font-medium text-emerald-800 mb-2">Demo Credentials</p>
-            <div className="space-y-1 text-sm text-emerald-700">
-              <p><strong>Admin:</strong> admin@carbonrush.ai / admin123</p>
-              <p><strong>User:</strong> user@carbonrush.ai / user123</p>
-            </div>
+          {/* Info box */}
+          <div className="mb-6 p-4 rounded-xl bg-sky-50 border border-sky-200">
+            <p className="text-sm font-medium text-sky-800 mb-1">🔐 Real Supabase Auth</p>
+            <p className="text-xs text-sky-700">
+              Accounts are created and stored in Supabase. {isLogin ? "Enter your registered email and password." : "Choose a role — Admin can monitor all users."}
+            </p>
           </div>
 
           {error && (
             <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              {success}
             </div>
           )}
 
@@ -164,9 +179,10 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Min 6 characters"
                   className="w-full pl-10 pr-12 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 bg-white"
                   required
+                  minLength={6}
                 />
                 <button
                   type="button"
@@ -184,7 +200,7 @@ export default function LoginPage() {
                 <div className="grid grid-cols-2 gap-3">
                   {[
                     { value: "user" as const, label: "User", desc: "Browse & trade credits", icon: User },
-                    { value: "admin" as const, label: "Admin", desc: "Manage & monitor", icon: ShieldCheck },
+                    { value: "admin" as const, label: "Admin", desc: "Monitor all users", icon: ShieldCheck },
                   ].map((opt) => (
                     <button
                       key={opt.value}
@@ -210,14 +226,23 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              {loading ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
-              {!loading && <ArrowRight className="w-4 h-4" />}
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {isLogin ? "Signing In..." : "Creating Account..."}
+                </>
+              ) : (
+                <>
+                  {isLogin ? "Sign In" : "Create Account"}
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <button
-              onClick={() => { setIsLogin(!isLogin); setError(""); }}
+              onClick={() => { setIsLogin(!isLogin); setError(""); setSuccess(""); }}
               className="text-sm text-gray-500 hover:text-emerald-600 transition-colors"
             >
               {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
@@ -232,5 +257,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <AuthProvider>
+      <LoginForm />
+    </AuthProvider>
   );
 }

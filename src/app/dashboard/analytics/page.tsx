@@ -570,11 +570,49 @@ export default function AnalyticsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl bg-white border border-gray-200 p-12 text-center shadow-sm"
+            className="space-y-6"
           >
-            <Globe size={48} className="text-sky-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">ESG Reports</h3>
-            <p className="text-sm text-gray-500 max-w-md mx-auto">Environmental, Social, and Governance reports with TCFD, SASB, and GRI framework alignment. Coming in Q3 2026.</p>
+            <div className="grid md:grid-cols-3 gap-5">
+              {[
+                { title: "Environmental", color: "emerald", items: [
+                  { label: "Total Carbon Offset", value: "847,532 tCO₂e" },
+                  { label: "Biodiversity Species Protected", value: "342" },
+                  { label: "Water Quality Improvement", value: "23% avg" },
+                  { label: "Mangrove Area Restored", value: "12,400 ha" },
+                  { label: "Coastal Erosion Reduction", value: "34%" },
+                  { label: "Marine Biodiversity Index", value: "8.7/10" },
+                ]},
+                { title: "Social", color: "sky", items: [
+                  { label: "Communities Benefited", value: "2,847" },
+                  { label: "Direct Jobs Created", value: "1,240" },
+                  { label: "Indirect Jobs", value: "3,800" },
+                  { label: "Women Participation", value: "42%" },
+                  { label: "Financial Inclusion", value: "89% bank-linked" },
+                  { label: "Avg Income Increase", value: "28%" },
+                ]},
+                { title: "Governance", color: "violet", items: [
+                  { label: "Transparency Score", value: "98/100" },
+                  { label: "Audit Frequency", value: "Quarterly" },
+                  { label: "Blockchain Verification", value: "100%" },
+                  { label: "Data Protection", value: "ISO 27001" },
+                  { label: "Third-Party Audits", value: "12 completed" },
+                  { label: "Regulatory Standards", value: "Verra, Gold Std" },
+                ]},
+              ].map((section, idx) => (
+                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }}
+                  className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm">
+                  <h4 className={`text-sm font-semibold mb-4 ${section.color === 'emerald' ? 'text-emerald-700' : section.color === 'sky' ? 'text-sky-700' : 'text-violet-700'}`}>{section.title}</h4>
+                  <div className="space-y-3">
+                    {section.items.map((item, i) => (
+                      <div key={i} className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500">{item.label}</span>
+                        <span className="text-xs font-semibold text-gray-900">{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         )}
 
@@ -585,11 +623,30 @@ export default function AnalyticsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl bg-white border border-gray-200 p-12 text-center shadow-sm"
+            className="space-y-6"
           >
-            <ShieldCheck size={48} className="text-violet-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Compliance Reports</h3>
-            <p className="text-sm text-gray-500 max-w-md mx-auto">Automated compliance reporting for EU ETS, CORSIA, and voluntary carbon market standards. Coming in Q3 2026.</p>
+            <div className="grid md:grid-cols-2 gap-5">
+              {[
+                { standard: "Verra VCS", status: "Compliant", lastAudit: "Jun 2025", score: 98, projects: 6 },
+                { standard: "Gold Standard", status: "Compliant", lastAudit: "May 2025", score: 96, projects: 4 },
+                { standard: "EU ETS Article 6", status: "Aligned", lastAudit: "Apr 2025", score: 94, projects: 10 },
+                { standard: "CORSIA", status: "Compliant", lastAudit: "Mar 2025", score: 97, projects: 3 },
+              ].map((reg, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
+                  className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-gray-900">{reg.standard}</h4>
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium">{reg.status}</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div><p className="text-[10px] text-gray-400 uppercase">Score</p><p className="text-sm font-bold text-gray-900">{reg.score}%</p></div>
+                    <div><p className="text-[10px] text-gray-400 uppercase">Last Audit</p><p className="text-sm font-bold text-gray-900">{reg.lastAudit}</p></div>
+                    <div><p className="text-[10px] text-gray-400 uppercase">Projects</p><p className="text-sm font-bold text-gray-900">{reg.projects}</p></div>
+                  </div>
+                  <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 rounded-full" style={{ width: `${reg.score}%` }} /></div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         )}
 
@@ -600,11 +657,40 @@ export default function AnalyticsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl bg-white border border-gray-200 p-12 text-center shadow-sm"
+            className="space-y-6"
           >
-            <Heart size={48} className="text-pink-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Impact Reports</h3>
-            <p className="text-sm text-gray-500 max-w-md mx-auto">SDG-aligned impact measurement dashboards with community benefit tracking and biodiversity metrics. Coming in Q4 2026.</p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { sdg: "SDG 13", title: "Climate Action", value: "847K tCO₂e offset", color: "emerald" },
+                { sdg: "SDG 14", title: "Life Below Water", value: "342 species protected", color: "sky" },
+                { sdg: "SDG 1", title: "No Poverty", value: "₹14.25 Cr to communities", color: "amber" },
+                { sdg: "SDG 8", title: "Decent Work", value: "5,040 jobs created", color: "violet" },
+              ].map((sdg, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
+                  className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm">
+                  <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold mb-2 ${sdg.color === 'emerald' ? 'bg-emerald-50 text-emerald-700' : sdg.color === 'sky' ? 'bg-sky-50 text-sky-700' : sdg.color === 'amber' ? 'bg-amber-50 text-amber-700' : 'bg-violet-50 text-violet-700'}`}>{sdg.sdg}</span>
+                  <h4 className="font-semibold text-gray-900 mb-1">{sdg.title}</h4>
+                  <p className="text-sm text-gray-500">{sdg.value}</p>
+                </motion.div>
+              ))}
+            </div>
+            <div className="rounded-2xl bg-white border border-gray-200 p-6 shadow-sm">
+              <h4 className="font-semibold text-gray-900 mb-4">Community Impact Breakdown</h4>
+              <div className="space-y-3">
+                {[
+                  { label: "Fishermen Livelihoods Improved", value: 1240, max: 2000, color: "bg-sky-500" },
+                  { label: "Women-Led Initiatives", value: 485, max: 800, color: "bg-pink-500" },
+                  { label: "Youth Training Programs", value: 320, max: 500, color: "bg-violet-500" },
+                  { label: "MSME Partnerships", value: 156, max: 200, color: "bg-amber-500" },
+                  { label: "Healthcare Access Improved", value: 890, max: 1200, color: "bg-emerald-500" },
+                ].map((item, i) => (
+                  <div key={i}>
+                    <div className="flex justify-between text-xs mb-1"><span className="text-gray-600">{item.label}</span><span className="font-semibold text-gray-900">{item.value.toLocaleString()}</span></div>
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden"><div className={`h-full rounded-full ${item.color}`} style={{ width: `${(item.value / item.max) * 100}%` }} /></div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

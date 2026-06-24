@@ -1,518 +1,256 @@
-// CarbonRush AI - Comprehensive Demo Data
-// 500+ Projects, 10,000+ Credits, Multiple Organizations
+// ─── CarbonRush AI — Complete Demo Data ───────────────────────────────────────
+// This file stores all demo/seed data locally for the fully functional platform.
+// Includes: Aadhaar verification records, projects, carbon credits, blockchain
+// transactions, community members, marketplace listings, and fraud alerts.
 
-// ===== Types =====
-export interface Project {
+// ─── Aadhaar-style Identity Verification (India DPI Layer) ─────────────────────
+export interface AadhaarVerification {
+  aadhaarId: string;
+  name: string;
+  state: string;
+  district: string;
+  verified: boolean;
+  verifiedAt: string;
+  carbonPassportId: string;
+  linkedProjects: string[];
+  communityRole: string;
+  bankLinked: boolean;
+  phoneLinked: boolean;
+}
+
+export const aadhaarRecords: AadhaarVerification[] = [
+  { aadhaarId: "XXXX-XXXX-1234", name: "Priya Sharma", state: "West Bengal", district: "South 24 Parganas", verified: true, verifiedAt: "2024-03-15T10:30:00Z", carbonPassportId: "CRP-00001", linkedProjects: ["Sundarbans Mangrove Delta"], communityRole: "Project Lead", bankLinked: true, phoneLinked: true },
+  { aadhaarId: "XXXX-XXXX-5678", name: "Rajesh Kumar", state: "Gujarat", district: "Devbhumi Dwarka", verified: true, verifiedAt: "2024-04-22T14:15:00Z", carbonPassportId: "CRP-00002", linkedProjects: ["Gulf of Kutch Marine"], communityRole: "Verifier", bankLinked: true, phoneLinked: true },
+  { aadhaarId: "XXXX-XXXX-9012", name: "Ananya Patel", state: "Tamil Nadu", district: "Cuddalore", verified: true, verifiedAt: "2024-02-10T09:45:00Z", carbonPassportId: "CRP-00003", linkedProjects: ["Pichavaram Seagrass", "Muthupet Lagoon"], communityRole: "Community Leader", bankLinked: true, phoneLinked: true },
+  { aadhaarId: "XXXX-XXXX-3456", name: "Vikram Singh", state: "Odisha", district: "Kendrapara", verified: true, verifiedAt: "2024-05-08T11:20:00Z", carbonPassportId: "CRP-00004", linkedProjects: ["Bhitarkanika Corridor"], communityRole: "Field Surveyor", bankLinked: true, phoneLinked: false },
+  { aadhaarId: "XXXX-XXXX-7890", name: "Meera Nair", state: "Kerala", district: "Alappuzha", verified: true, verifiedAt: "2024-06-01T08:30:00Z", carbonPassportId: "CRP-00007", linkedProjects: ["Vembanad Wetlands"], communityRole: "Data Collector", bankLinked: false, phoneLinked: true },
+  { aadhaarId: "XXXX-XXXX-2345", name: "Arjun Reddy", state: "Andhra Pradesh", district: "East Godavari", verified: true, verifiedAt: "2024-01-20T16:00:00Z", carbonPassportId: "CRP-00005", linkedProjects: ["Coringa Wildlife", "Godavari Delta"], communityRole: "NGO Coordinator", bankLinked: true, phoneLinked: true },
+  { aadhaarId: "XXXX-XXXX-6789", name: "Deepa Menon", state: "Odisha", district: "Puri", verified: false, verifiedAt: "", carbonPassportId: "", linkedProjects: [], communityRole: "Applicant", bankLinked: false, phoneLinked: true },
+  { aadhaarId: "XXXX-XXXX-0123", name: "Suresh Babu", state: "Tamil Nadu", district: "Thanjavur", verified: true, verifiedAt: "2024-07-12T13:45:00Z", carbonPassportId: "CRP-00008", linkedProjects: ["Muthupet Lagoon"], communityRole: "Fisherman Lead", bankLinked: true, phoneLinked: true },
+  { aadhaarId: "XXXX-XXXX-4567", name: "Kavitha Rao", state: "Karnataka", district: "Uttara Kannada", verified: true, verifiedAt: "2024-08-05T10:10:00Z", carbonPassportId: "CRP-00009", linkedProjects: ["Karnataka Mangroves"], communityRole: "Restoration Expert", bankLinked: true, phoneLinked: true },
+  { aadhaarId: "XXXX-XXXX-8901", name: "Amit Deshmukh", state: "Maharashtra", district: "Ratnagiri", verified: true, verifiedAt: "2024-03-28T15:30:00Z", carbonPassportId: "CRP-00010", linkedProjects: ["Ratnagiri Coast"], communityRole: "MSME Owner", bankLinked: true, phoneLinked: true },
+];
+
+// ─── Carbon Projects ───────────────────────────────────────────────────────────
+export interface CarbonProject {
   id: string;
   name: string;
+  type: "Mangrove" | "Wetland" | "Seagrass" | "Saltmarsh" | "Coral";
   location: string;
   state: string;
-  lat: number;
-  lng: number;
-  type: "mangrove" | "wetland" | "seagrass" | "coral" | "saltmarsh";
-  status: "active" | "verified" | "pending" | "under_review";
-  carbonVerified: number;
-  creditsIssued: number;
+  coordinates: { lat: number; lng: number };
   area: number; // hectares
-  ngo: string;
-  community: string;
+  carbonSequestered: number; // tCO2
+  creditsIssued: number;
+  creditsRetired: number;
+  verificationScore: number; // 0-100
+  ndviAverage: number;
+  status: "active" | "pending" | "under_review";
   startDate: string;
-  verificationScore: number;
-  ndviScore: number;
-  healthScore: number;
-  carbonRate: number; // tonnes/hectare/year
-  fraudRisk: number;
-  blockchainTx: string;
+  lastVerified: string;
+  communityMembers: number;
+  biodiversityScore: number;
+  waterQuality: number;
+  registry: string;
 }
 
-export interface CarbonCredit {
-  id: string;
+export const carbonProjects: CarbonProject[] = [
+  { id: "PRJ-001", name: "Sundarbans Mangrove Delta", type: "Mangrove", location: "South 24 Parganas", state: "West Bengal", coordinates: { lat: 21.9497, lng: 88.8977 }, area: 4500, carbonSequestered: 12450, creditsIssued: 11200, creditsRetired: 3400, verificationScore: 98, ndviAverage: 0.78, status: "active", startDate: "2022-06-15", lastVerified: "2025-06-20", communityMembers: 342, biodiversityScore: 94, waterQuality: 88, registry: "Verra VCS" },
+  { id: "PRJ-002", name: "Gulf of Kutch Marine Reserve", type: "Wetland", location: "Devbhumi Dwarka", state: "Gujarat", coordinates: { lat: 22.4707, lng: 69.0807 }, area: 3200, carbonSequestered: 8920, creditsIssued: 8100, creditsRetired: 2100, verificationScore: 96, ndviAverage: 0.65, status: "active", startDate: "2022-09-01", lastVerified: "2025-06-18", communityMembers: 218, biodiversityScore: 87, waterQuality: 82, registry: "Gold Standard" },
+  { id: "PRJ-003", name: "Pichavaram Seagrass Bed", type: "Seagrass", location: "Cuddalore", state: "Tamil Nadu", coordinates: { lat: 11.4181, lng: 79.7815 }, area: 1800, carbonSequestered: 6340, creditsIssued: 5900, creditsRetired: 1800, verificationScore: 94, ndviAverage: 0.72, status: "active", startDate: "2023-01-10", lastVerified: "2025-06-15", communityMembers: 156, biodiversityScore: 91, waterQuality: 90, registry: "Verra VCS" },
+  { id: "PRJ-004", name: "Chilika Lake Reserve", type: "Wetland", location: "Puri", state: "Odisha", coordinates: { lat: 19.7088, lng: 85.3184 }, area: 6800, carbonSequestered: 15200, creditsIssued: 14500, creditsRetired: 5200, verificationScore: 97, ndviAverage: 0.81, status: "active", startDate: "2022-03-20", lastVerified: "2025-06-22", communityMembers: 485, biodiversityScore: 96, waterQuality: 85, registry: "Verra VCS" },
+  { id: "PRJ-005", name: "Bhitarkanika Corridor", type: "Mangrove", location: "Kendrapara", state: "Odisha", coordinates: { lat: 20.7286, lng: 86.8710 }, area: 3800, carbonSequestered: 9870, creditsIssued: 9200, creditsRetired: 2800, verificationScore: 95, ndviAverage: 0.76, status: "active", startDate: "2022-11-05", lastVerified: "2025-06-19", communityMembers: 267, biodiversityScore: 92, waterQuality: 86, registry: "Gold Standard" },
+  { id: "PRJ-006", name: "Coringa Wildlife Sanctuary", type: "Mangrove", location: "East Godavari", state: "Andhra Pradesh", coordinates: { lat: 16.8002, lng: 82.2651 }, area: 2500, carbonSequestered: 7650, creditsIssued: 7000, creditsRetired: 1500, verificationScore: 93, ndviAverage: 0.69, status: "under_review", startDate: "2023-04-15", lastVerified: "2025-06-10", communityMembers: 189, biodiversityScore: 85, waterQuality: 79, registry: "Verra VCS" },
+  { id: "PRJ-007", name: "Vembanad Wetlands", type: "Wetland", location: "Alappuzha", state: "Kerala", coordinates: { lat: 9.6145, lng: 76.3581 }, area: 2100, carbonSequestered: 4890, creditsIssued: 4500, creditsRetired: 1200, verificationScore: 92, ndviAverage: 0.68, status: "active", startDate: "2023-07-01", lastVerified: "2025-06-12", communityMembers: 134, biodiversityScore: 88, waterQuality: 84, registry: "Gold Standard" },
+  { id: "PRJ-008", name: "Muthupet Lagoon", type: "Wetland", location: "Thanjavur", state: "Tamil Nadu", coordinates: { lat: 10.3667, lng: 79.5167 }, area: 1600, carbonSequestered: 5430, creditsIssued: 5000, creditsRetired: 900, verificationScore: 91, ndviAverage: 0.64, status: "active", startDate: "2023-02-28", lastVerified: "2025-06-14", communityMembers: 112, biodiversityScore: 83, waterQuality: 81, registry: "Verra VCS" },
+  { id: "PRJ-009", name: "Godavari Delta Restoration", type: "Mangrove", location: "East Godavari", state: "Andhra Pradesh", coordinates: { lat: 16.7500, lng: 82.2500 }, area: 3100, carbonSequestered: 8200, creditsIssued: 7800, creditsRetired: 2200, verificationScore: 94, ndviAverage: 0.74, status: "active", startDate: "2023-09-10", lastVerified: "2025-06-21", communityMembers: 201, biodiversityScore: 90, waterQuality: 87, registry: "Gold Standard" },
+  { id: "PRJ-010", name: "Ratnagiri Saltmarsh", type: "Saltmarsh", location: "Ratnagiri", state: "Maharashtra", coordinates: { lat: 16.9944, lng: 73.3000 }, area: 900, carbonSequestered: 2890, creditsIssued: 2600, creditsRetired: 600, verificationScore: 89, ndviAverage: 0.58, status: "pending", startDate: "2024-01-15", lastVerified: "2025-06-08", communityMembers: 78, biodiversityScore: 81, waterQuality: 78, registry: "Verra VCS" },
+];
+
+// ─── Blockchain Transactions ────────────────────────────────────────────────────
+export interface BlockchainTx {
+  hash: string;
+  type: "Mint NFT" | "Transfer Credit" | "Retire Credit" | "Verify Project";
+  from: string;
+  to: string;
+  amount: string;
+  timestamp: string;
+  status: "confirmed" | "pending";
+  block: number;
+  gas: string;
   projectId: string;
-  vintage: number;
-  quantity: number;
-  price: number;
-  status: "available" | "sold" | "retired";
-  buyer?: string;
-  issuedAt: string;
-  retiredAt?: string;
-  tokenId?: string;
 }
 
-export interface Organization {
+export const blockchainTransactions: BlockchainTx[] = [
+  { hash: "0xa1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456", type: "Mint NFT", from: "0xCarbonRush...Minter", to: "0xPriya...1234", amount: "CRP-00001", timestamp: "2 min ago", status: "confirmed", block: 58241093, gas: "0.0042 MATIC", projectId: "PRJ-001" },
+  { hash: "0xb2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567a", type: "Transfer Credit", from: "0xRajesh...5678", to: "0xGreenFund...9012", amount: "500 tCO₂", timestamp: "15 min ago", status: "confirmed", block: 58241089, gas: "0.0038 MATIC", projectId: "PRJ-002" },
+  { hash: "0xc3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567ab2", type: "Retire Credit", from: "0xTataSteel...3456", to: "0x000...Burn", amount: "1,200 tCO₂", timestamp: "1 hr ago", status: "confirmed", block: 58241045, gas: "0.0051 MATIC", projectId: "PRJ-004" },
+  { hash: "0xd4e5f6789012345678901234567890abcdef1234567890abcdef1234567ab2c3", type: "Verify Project", from: "0xCarbonRush...AI", to: "0xRegistry...Verra", amount: "PRJ-005", timestamp: "2 hr ago", status: "confirmed", block: 58241001, gas: "0.0065 MATIC", projectId: "PRJ-005" },
+  { hash: "0xe5f6789012345678901234567890abcdef1234567890abcdef1234567ab2c3d4", type: "Transfer Credit", from: "0xArjun...2345", to: "0xRelianceGreen...6789", amount: "800 tCO₂", timestamp: "3 hr ago", status: "confirmed", block: 58240987, gas: "0.0041 MATIC", projectId: "PRJ-005" },
+  { hash: "0xf6789012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5", type: "Mint NFT", from: "0xCarbonRush...Minter", to: "0xAnanya...9012", amount: "CRP-00003", timestamp: "4 hr ago", status: "confirmed", block: 58240943, gas: "0.0044 MATIC", projectId: "PRJ-003" },
+  { hash: "0x6789012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f6", type: "Retire Credit", from: "0xInfosys...0123", to: "0x000...Burn", amount: "2,500 tCO₂", timestamp: "5 hr ago", status: "confirmed", block: 58240899, gas: "0.0058 MATIC", projectId: "PRJ-001" },
+  { hash: "0x789012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f67", type: "Transfer Credit", from: "0xKavitha...4567", to: "0xAdaniGreen...8901", amount: "350 tCO₂", timestamp: "6 hr ago", status: "confirmed", block: 58240855, gas: "0.0039 MATIC", projectId: "PRJ-009" },
+  { hash: "0x89012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f678", type: "Verify Project", from: "0xCarbonRush...AI", to: "0xRegistry...Gold", amount: "PRJ-007", timestamp: "8 hr ago", status: "confirmed", block: 58240801, gas: "0.0062 MATIC", projectId: "PRJ-007" },
+  { hash: "0x9012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f6789", type: "Mint NFT", from: "0xCarbonRush...Minter", to: "0xAmit...8901", amount: "CRP-00010", timestamp: "10 hr ago", status: "confirmed", block: 58240756, gas: "0.0043 MATIC", projectId: "PRJ-010" },
+  { hash: "0x012345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f67890", type: "Transfer Credit", from: "0xMeera...7890", to: "0xHDFCGreen...2345", amount: "150 tCO₂", timestamp: "12 hr ago", status: "confirmed", block: 58240712, gas: "0.0037 MATIC", projectId: "PRJ-007" },
+  { hash: "0x12345678901234567890abcdef1234567890abcdef1234567ab2c3d4e5f678901", type: "Retire Credit", from: "0xMahindra...6789", to: "0x000...Burn", amount: "900 tCO₂", timestamp: "1 day ago", status: "confirmed", block: 58240668, gas: "0.0049 MATIC", projectId: "PRJ-002" },
+];
+
+// ─── Community Members ──────────────────────────────────────────────────────────
+export interface CommunityMember {
   id: string;
   name: string;
-  type: "ngo" | "msme" | "community" | "corporate" | "government";
+  role: string;
   location: string;
-  projects: number;
+  projectsInvolved: number;
   creditsEarned: number;
-  totalEarnings: number;
   joinedAt: string;
+  verified: boolean;
+  payoutReceived: number; // in INR
+  language: string;
 }
 
-export interface Verification {
+export const communityMembers: CommunityMember[] = [
+  { id: "CM-001", name: "Priya Sharma", role: "Project Lead", location: "West Bengal", projectsInvolved: 3, creditsEarned: 4520, joinedAt: "2022-06", verified: true, payoutReceived: 285000, language: "Bengali" },
+  { id: "CM-002", name: "Rajesh Kumar", role: "Field Verifier", location: "Gujarat", projectsInvolved: 2, creditsEarned: 3200, joinedAt: "2022-09", verified: true, payoutReceived: 198000, language: "Gujarati" },
+  { id: "CM-003", name: "Ananya Patel", role: "Community Leader", location: "Tamil Nadu", projectsInvolved: 4, creditsEarned: 6800, joinedAt: "2022-02", verified: true, payoutReceived: 425000, language: "Tamil" },
+  { id: "CM-004", name: "Vikram Singh", role: "Data Collector", location: "Odisha", projectsInvolved: 2, creditsEarned: 1890, joinedAt: "2023-05", verified: true, payoutReceived: 112000, language: "Odia" },
+  { id: "CM-005", name: "Meera Nair", role: "Restoration Expert", location: "Kerala", projectsInvolved: 1, creditsEarned: 950, joinedAt: "2023-10", verified: true, payoutReceived: 58000, language: "Malayalam" },
+  { id: "CM-006", name: "Arjun Reddy", role: "NGO Coordinator", location: "Andhra Pradesh", projectsInvolved: 5, creditsEarned: 8700, joinedAt: "2022-01", verified: true, payoutReceived: 540000, language: "Telugu" },
+  { id: "CM-007", name: "Deepa Menon", role: "Fisherman Lead", location: "Odisha", projectsInvolved: 1, creditsEarned: 780, joinedAt: "2024-02", verified: false, payoutReceived: 0, language: "Odia" },
+  { id: "CM-008", name: "Suresh Babu", role: "MSME Owner", location: "Tamil Nadu", projectsInvolved: 2, creditsEarned: 2100, joinedAt: "2023-08", verified: true, payoutReceived: 132000, language: "Tamil" },
+  { id: "CM-009", name: "Kavitha Rao", role: "Scientist", location: "Karnataka", projectsInvolved: 3, creditsEarned: 5200, joinedAt: "2022-07", verified: true, payoutReceived: 325000, language: "Kannada" },
+  { id: "CM-010", name: "Amit Deshmukh", role: "MSME Owner", location: "Maharashtra", projectsInvolved: 2, creditsEarned: 2800, joinedAt: "2023-03", verified: true, payoutReceived: 175000, language: "Marathi" },
+];
+
+// ─── Marketplace Listings ────────────────────────────────────────────────────────
+export interface MarketplaceListing {
   id: string;
-  projectId: string;
   projectName: string;
-  type: "satellite" | "ground" | "ai" | "manual";
-  status: "completed" | "in_progress" | "failed" | "pending";
-  confidence: number;
-  timestamp: string;
-  carbonEstimate: number;
-  ndviDelta: number;
-  verifier: string;
+  seller: string;
+  credits: number;
+  pricePerCredit: number; // USD
+  vintage: number;
+  registry: string;
+  type: string;
+  status: "active" | "sold" | "expired";
+  listedAt: string;
 }
 
-export interface MarketOrder {
-  id: string;
-  type: "buy" | "sell";
-  quantity: number;
-  price: number;
-  total: number;
-  buyer: string;
-  status: "filled" | "open" | "partial";
-  timestamp: string;
-}
+export const marketplaceListings: MarketplaceListing[] = [
+  { id: "MKT-001", projectName: "Sundarbans Mangrove Delta", seller: "CarbonRush Verified", credits: 2500, pricePerCredit: 24.50, vintage: 2024, registry: "Verra VCS", type: "Mangrove", status: "active", listedAt: "2025-06-20" },
+  { id: "MKT-002", projectName: "Chilika Lake Reserve", seller: "Odisha Green Fund", credits: 1800, pricePerCredit: 22.00, vintage: 2024, registry: "Verra VCS", type: "Wetland", status: "active", listedAt: "2025-06-19" },
+  { id: "MKT-003", projectName: "Bhitarkanika Corridor", seller: "CarbonRush Verified", credits: 1200, pricePerCredit: 26.75, vintage: 2024, registry: "Gold Standard", type: "Mangrove", status: "active", listedAt: "2025-06-18" },
+  { id: "MKT-004", projectName: "Pichavaram Seagrass", seller: "Tamil Nadu CC", credits: 800, pricePerCredit: 28.00, vintage: 2024, registry: "Verra VCS", type: "Seagrass", status: "active", listedAt: "2025-06-17" },
+  { id: "MKT-005", projectName: "Godavari Delta", seller: "AP Restoration Trust", credits: 1500, pricePerCredit: 23.25, vintage: 2024, registry: "Gold Standard", type: "Mangrove", status: "sold", listedAt: "2025-06-15" },
+  { id: "MKT-006", projectName: "Gulf of Kutch Marine", seller: "Gujarat Marine Trust", credits: 2000, pricePerCredit: 21.50, vintage: 2025, registry: "Gold Standard", type: "Wetland", status: "active", listedAt: "2025-06-22" },
+  { id: "MKT-007", projectName: "Vembanad Wetlands", seller: "Kerala Green Initiative", credits: 600, pricePerCredit: 25.00, vintage: 2024, registry: "Gold Standard", type: "Wetland", status: "active", listedAt: "2025-06-21" },
+  { id: "MKT-008", projectName: "Ratnagiri Saltmarsh", seller: "Maharashtra Coast Fund", credits: 400, pricePerCredit: 19.75, vintage: 2025, registry: "Verra VCS", type: "Saltmarsh", status: "active", listedAt: "2025-06-20" },
+];
 
+// ─── Fraud Alerts ───────────────────────────────────────────────────────────────
 export interface FraudAlert {
   id: string;
+  type: "duplicate_claim" | "boundary_overlap" | "ndvi_anomaly" | "identity_mismatch" | "carbon_inflation";
+  severity: "critical" | "high" | "medium" | "low";
   projectId: string;
   projectName: string;
-  severity: "critical" | "high" | "medium" | "low";
-  type: string;
   description: string;
-  timestamp: string;
+  detectedAt: string;
   status: "investigating" | "resolved" | "dismissed";
+  aiConfidence: number;
 }
 
-// ===== Constants =====
-const INDIAN_COASTAL_STATES = [
-  "Gujarat", "Maharashtra", "Goa", "Karnataka", "Kerala",
-  "Tamil Nadu", "Andhra Pradesh", "Odisha", "West Bengal",
-  "Andaman & Nicobar", "Lakshadweep", "Puducherry"
+export const fraudAlerts: FraudAlert[] = [
+  { id: "FRD-001", type: "duplicate_claim", severity: "critical", projectId: "PRJ-EXT-001", projectName: "Unknown Mangrove Project", description: "Detected duplicate carbon credit claims overlapping with verified Sundarbans project boundaries. 2,400 tCO₂ potentially double-counted.", detectedAt: "2025-06-22T14:30:00Z", status: "investigating", aiConfidence: 98.7 },
+  { id: "FRD-002", type: "ndvi_anomaly", severity: "high", projectId: "PRJ-006", projectName: "Coringa Wildlife Sanctuary", description: "Sudden 23% NDVI drop in eastern sector inconsistent with seasonal patterns. Possible unauthorized clearing detected.", detectedAt: "2025-06-21T09:15:00Z", status: "investigating", aiConfidence: 94.2 },
+  { id: "FRD-003", type: "carbon_inflation", severity: "medium", projectId: "PRJ-010", projectName: "Ratnagiri Saltmarsh", description: "Carbon sequestration estimates 34% higher than model predictions for similar saltmarsh ecosystems. Recalibration recommended.", detectedAt: "2025-06-20T16:45:00Z", status: "resolved", aiConfidence: 87.5 },
+  { id: "FRD-004", type: "boundary_overlap", severity: "high", projectId: "PRJ-009", projectName: "Godavari Delta", description: "12% boundary overlap detected with adjacent non-registered land use area. GPS verification needed.", detectedAt: "2025-06-19T11:20:00Z", status: "resolved", aiConfidence: 92.1 },
+  { id: "FRD-005", type: "identity_mismatch", severity: "low", projectId: "PRJ-007", projectName: "Vembanad Wetlands", description: "Minor discrepancy in beneficiary records — 3 community members have incomplete Aadhaar linkage.", detectedAt: "2025-06-18T08:00:00Z", status: "dismissed", aiConfidence: 76.3 },
 ];
 
-const PROJECT_TYPES: Project["type"][] = ["mangrove", "wetland", "seagrass", "coral", "saltmarsh"];
+// ─── Platform Statistics ─────────────────────────────────────────────────────────
+export const platformStats = {
+  totalCarbonSequestered: 847532,
+  totalCreditsIssued: 623841,
+  totalCreditsRetired: 198400,
+  totalProjects: 512,
+  activeProjects: 487,
+  totalCommunityMembers: 2847,
+  totalPayoutsINR: 142500000, // ₹14.25 Cr
+  averageVerificationScore: 97.3,
+  blockchainTransactions: 45231,
+  nftsMinted: 512,
+  smartContracts: 3,
+  polygonNetwork: "Mainnet",
+  latestBlock: 58241093,
+  fraudsDetected: 47,
+  fraudsPrevented: 45,
+  carbonValue: 18700000, // $18.7M
+};
 
-const NGOs = [
-  "Coastal Green Foundation", "Blue Carbon India Trust", "Mangrove Alliance",
-  "Ocean Restoration Network", "Wetland Warriors", "SeaGreen Initiative",
-  "Coral Guard Society", "Sundarbans Conservation Trust", "Kerala Marine Foundation",
-  "Gujarat Coastal Trust", "Tamil Nadu Green Coast", "Odisha Blue Carbon",
-  "Bay of Bengal Initiative", "Arabian Sea Guardians", "Andaman Marine Trust",
-  "National Wetland Society", "Green Coast Alliance", "Marine Carbon Foundation",
-  "Indian Ocean Blue Initiative", "Coastal Livelihood Trust"
+// ─── ESG Report Data ─────────────────────────────────────────────────────────────
+export const esgReportData = {
+  environmental: {
+    totalCarbonOffset: "847,532 tCO₂e",
+    biodiversitySpeciesProtected: 342,
+    waterQualityImprovement: "23% avg improvement",
+    mangroveAreaRestored: "12,400 hectares",
+    coastalErosionReduction: "34%",
+    marineBiodiversityIndex: 8.7,
+  },
+  social: {
+    communitiesBenefited: 2847,
+    directJobs: 1240,
+    indirectJobs: 3800,
+    womenParticipation: "42%",
+    financialInclusion: "89% bank-linked",
+    languagesSupported: 12,
+    avgIncomeIncrease: "28%",
+  },
+  governance: {
+    transparencyScore: "98/100",
+    auditFrequency: "Quarterly",
+    blockchainVerification: "100%",
+    regulatoryCompliance: ["Verra VCS", "Gold Standard", "UNFCCC CDM"],
+    dataProtection: "ISO 27001 Compliant",
+    thirdPartyAudits: 12,
+  },
+};
+
+// ─── Smart Contract Info ──────────────────────────────────────────────────────────
+export const smartContracts = [
+  {
+    name: "CarbonPassportNFT",
+    address: "0x742d...3a91",
+    network: "Polygon Mainnet",
+    standard: "ERC-721",
+    totalMinted: 512,
+    description: "Issues unique Carbon Passport NFTs for each verified blue carbon project. Each NFT contains immutable verification data, carbon metrics, and provenance chain.",
+    functions: ["mintPassport()", "verifyCarbon()", "getProjectData()", "transferOwnership()"],
+    events: ["PassportMinted", "CarbonVerified", "OwnershipTransferred"],
+    gasEstimate: "~0.004 MATIC per mint",
+  },
+  {
+    name: "CarbonCreditToken",
+    address: "0x891f...7b24",
+    network: "Polygon Mainnet",
+    standard: "ERC-20",
+    totalSupply: "623,841 CCT",
+    description: "Fungible carbon credit tokens representing 1 tCO₂e each. Supports transfer, retirement (burn), and fractional trading on the CarbonRush marketplace.",
+    functions: ["transfer()", "retire()", "batchTransfer()", "approve()", "balanceOf()"],
+    events: ["Transfer", "CreditRetired", "Approval"],
+    gasEstimate: "~0.003 MATIC per transfer",
+  },
+  {
+    name: "VerificationOracle",
+    address: "0x5c3d...9e17",
+    network: "Polygon Mainnet",
+    standard: "Custom",
+    totalVerifications: 45231,
+    description: "On-chain verification oracle that records AI verification results, NDVI data, and carbon estimation outputs. Provides tamper-proof audit trail for all project verifications.",
+    functions: ["submitVerification()", "getVerificationHistory()", "flagAnomaly()", "updateNDVI()"],
+    events: ["VerificationSubmitted", "AnomalyFlagged", "NDVIUpdated"],
+    gasEstimate: "~0.006 MATIC per verification",
+  },
 ];
-
-const COMMUNITIES = [
-  "Sundarbans Fisher Collective", "Kutch Coastal Community", "Pichavaram Village Council",
-  "Bhitarkanika Community", "Coringa Village Network", "Muthupet Fishing Alliance",
-  "Vembanad Lake Community", "Chilika Lagoon Collective", "Goa Mangrove Network",
-  "Ratnagiri Coastal Group", "Pulicat Lake Community", "Kavvayi Island Council",
-  "Diu Fisher Community", "Lakshadweep Marine Group", "Port Blair Coast Alliance",
-  "Mahanadi Delta Collective", "Godavari Delta Network", "Krishna Estuary Group",
-  "Hooghly River Community", "Tapi Estuary Collective"
-];
-
-const BUYERS = [
-  "Tata Sustainability Fund", "Reliance Green Capital", "Infosys Carbon Neutral",
-  "Wipro Nature Trust", "Mahindra EarthCare", "Adani Green Energy",
-  "ITC Sustainability", "HCL Climate Action", "Microsoft India Green",
-  "Google Climate Fund", "Amazon Climate Pledge India", "Shell India Carbon",
-  "BP India Neutral", "Total Energies India", "Goldman Sachs ESG",
-  "BlackRock Climate", "JPMorgan Green Fund", "World Bank Carbon Finance"
-];
-
-const LOCATIONS = [
-  { name: "Sundarbans Delta", state: "West Bengal", lat: 21.9497, lng: 88.8967 },
-  { name: "Gulf of Kutch", state: "Gujarat", lat: 22.9500, lng: 69.6667 },
-  { name: "Pichavaram Mangroves", state: "Tamil Nadu", lat: 11.4250, lng: 79.7750 },
-  { name: "Bhitarkanika", state: "Odisha", lat: 20.7333, lng: 87.0167 },
-  { name: "Coringa Wildlife", state: "Andhra Pradesh", lat: 16.7667, lng: 82.3500 },
-  { name: "Muthupet Lagoon", state: "Tamil Nadu", lat: 10.4000, lng: 79.5167 },
-  { name: "Vembanad Lake", state: "Kerala", lat: 9.5833, lng: 76.3667 },
-  { name: "Chilika Lake", state: "Odisha", lat: 19.7167, lng: 85.3167 },
-  { name: "Goa Mangroves", state: "Goa", lat: 15.4000, lng: 73.8833 },
-  { name: "Ratnagiri Coast", state: "Maharashtra", lat: 16.9944, lng: 73.3000 },
-  { name: "Pulicat Lake", state: "Tamil Nadu", lat: 13.4167, lng: 80.3167 },
-  { name: "Kavvayi Island", state: "Kerala", lat: 12.1000, lng: 75.2000 },
-  { name: "Diu Coast", state: "Gujarat", lat: 20.7144, lng: 70.9875 },
-  { name: "Havelock Island", state: "Andaman & Nicobar", lat: 11.9833, lng: 93.0000 },
-  { name: "Mahanadi Delta", state: "Odisha", lat: 20.3167, lng: 86.7667 },
-  { name: "Godavari Delta", state: "Andhra Pradesh", lat: 16.5333, lng: 82.2333 },
-  { name: "Krishna Estuary", state: "Andhra Pradesh", lat: 15.8833, lng: 80.9167 },
-  { name: "Mumbai Mangroves", state: "Maharashtra", lat: 19.0760, lng: 72.8777 },
-  { name: "Kochi Backwaters", state: "Kerala", lat: 9.9312, lng: 76.2673 },
-  { name: "Karwar Coast", state: "Karnataka", lat: 14.8127, lng: 74.1297 },
-  { name: "Mangalore Wetlands", state: "Karnataka", lat: 12.8714, lng: 74.8431 },
-  { name: "Puducherry Coast", state: "Puducherry", lat: 11.9416, lng: 79.8083 },
-  { name: "Mandovi River", state: "Goa", lat: 15.5000, lng: 73.8333 },
-  { name: "Hooghly Estuary", state: "West Bengal", lat: 22.0000, lng: 88.1000 },
-  { name: "Tapi Estuary", state: "Gujarat", lat: 21.1702, lng: 72.8311 },
-];
-
-// ===== Generators =====
-function randomBetween(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
-}
-
-function randomInt(min: number, max: number): number {
-  return Math.floor(randomBetween(min, max));
-}
-
-function randomChoice<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function generateBlockchainTx(): string {
-  const chars = "0123456789abcdef";
-  let hash = "0x";
-  for (let i = 0; i < 64; i++) hash += chars[Math.floor(Math.random() * 16)];
-  return hash;
-}
-
-function generateDate(yearStart: number, yearEnd: number): string {
-  const start = new Date(yearStart, 0, 1).getTime();
-  const end = new Date(yearEnd, 11, 31).getTime();
-  return new Date(start + Math.random() * (end - start)).toISOString();
-}
-
-// ===== Generate Projects =====
-export function generateProjects(count: number = 500): Project[] {
-  const projects: Project[] = [];
-  for (let i = 0; i < count; i++) {
-    const loc = LOCATIONS[i % LOCATIONS.length];
-    const latOffset = randomBetween(-0.5, 0.5);
-    const lngOffset = randomBetween(-0.5, 0.5);
-    const type = PROJECT_TYPES[i % PROJECT_TYPES.length];
-    const area = randomInt(10, 2000);
-    const carbonRate = type === "mangrove" ? randomBetween(8, 25) :
-                       type === "wetland" ? randomBetween(5, 15) :
-                       type === "seagrass" ? randomBetween(3, 12) :
-                       type === "coral" ? randomBetween(2, 8) :
-                       randomBetween(4, 10);
-    
-    const carbonVerified = Math.round(area * carbonRate * randomBetween(1, 5));
-    const creditsIssued = Math.round(carbonVerified * randomBetween(0.7, 0.95));
-
-    projects.push({
-      id: `CRP-${String(i + 1).padStart(5, "0")}`,
-      name: `${loc.name} ${type.charAt(0).toUpperCase() + type.slice(1)} Project ${Math.ceil((i + 1) / LOCATIONS.length)}`,
-      location: loc.name,
-      state: loc.state,
-      lat: loc.lat + latOffset,
-      lng: loc.lng + lngOffset,
-      type,
-      status: randomChoice(["active", "active", "verified", "verified", "verified", "pending", "under_review"]),
-      carbonVerified,
-      creditsIssued,
-      area,
-      ngo: randomChoice(NGOs),
-      community: randomChoice(COMMUNITIES),
-      startDate: generateDate(2020, 2024),
-      verificationScore: randomBetween(82, 99),
-      ndviScore: randomBetween(0.3, 0.9),
-      healthScore: randomBetween(65, 98),
-      carbonRate,
-      fraudRisk: randomBetween(0.01, 0.15),
-      blockchainTx: generateBlockchainTx(),
-    });
-  }
-  return projects;
-}
-
-// ===== Generate Credits =====
-export function generateCredits(projects: Project[], count: number = 10000): CarbonCredit[] {
-  const credits: CarbonCredit[] = [];
-  for (let i = 0; i < count; i++) {
-    const project = randomChoice(projects);
-    const status = randomChoice(["available", "available", "sold", "sold", "sold", "retired"]) as CarbonCredit["status"];
-    const price = randomBetween(8, 45);
-    const quantity = randomInt(10, 500);
-    
-    credits.push({
-      id: `CRC-${String(i + 1).padStart(6, "0")}`,
-      projectId: project.id,
-      vintage: randomChoice([2022, 2023, 2024, 2025]),
-      quantity,
-      price: Math.round(price * 100) / 100,
-      status,
-      buyer: status === "sold" || status === "retired" ? randomChoice(BUYERS) : undefined,
-      issuedAt: generateDate(2022, 2025),
-      retiredAt: status === "retired" ? generateDate(2024, 2025) : undefined,
-      tokenId: `${randomInt(1, 99999)}`,
-    });
-  }
-  return credits;
-}
-
-// ===== Generate Organizations =====
-export function generateOrganizations(): Organization[] {
-  const orgs: Organization[] = [];
-  
-  NGOs.forEach((name, i) => {
-    orgs.push({
-      id: `ORG-${String(i + 1).padStart(4, "0")}`,
-      name,
-      type: "ngo",
-      location: randomChoice(INDIAN_COASTAL_STATES),
-      projects: randomInt(5, 40),
-      creditsEarned: randomInt(1000, 50000),
-      totalEarnings: randomInt(50000, 2000000),
-      joinedAt: generateDate(2021, 2024),
-    });
-  });
-
-  COMMUNITIES.forEach((name, i) => {
-    orgs.push({
-      id: `ORG-${String(i + 21).padStart(4, "0")}`,
-      name,
-      type: "community",
-      location: randomChoice(INDIAN_COASTAL_STATES),
-      projects: randomInt(2, 15),
-      creditsEarned: randomInt(500, 20000),
-      totalEarnings: randomInt(10000, 500000),
-      joinedAt: generateDate(2022, 2025),
-    });
-  });
-
-  const MSME_NAMES = [
-    "GreenShell Exports", "CoastalCraft India", "SeaFresh Processing",
-    "Mangrove Honey Co.", "Blue Crab Fisheries", "Eco Salt Works",
-    "Tidal Farm Solutions", "Sea Bamboo Industries", "Reef Tourism Co.",
-    "Coastal Solar Farms"
-  ];
-
-  MSME_NAMES.forEach((name, i) => {
-    orgs.push({
-      id: `ORG-${String(i + 41).padStart(4, "0")}`,
-      name,
-      type: "msme",
-      location: randomChoice(INDIAN_COASTAL_STATES),
-      projects: randomInt(1, 8),
-      creditsEarned: randomInt(200, 10000),
-      totalEarnings: randomInt(5000, 200000),
-      joinedAt: generateDate(2023, 2025),
-    });
-  });
-
-  return orgs;
-}
-
-// ===== Generate Verifications =====
-export function generateVerifications(projects: Project[], count: number = 100): Verification[] {
-  const verifications: Verification[] = [];
-  for (let i = 0; i < count; i++) {
-    const project = randomChoice(projects);
-    verifications.push({
-      id: `VER-${String(i + 1).padStart(5, "0")}`,
-      projectId: project.id,
-      projectName: project.name,
-      type: randomChoice(["satellite", "satellite", "ai", "ai", "ground", "manual"]),
-      status: randomChoice(["completed", "completed", "completed", "in_progress", "pending"]),
-      confidence: randomBetween(85, 99.5),
-      timestamp: generateDate(2024, 2025),
-      carbonEstimate: randomInt(100, 10000),
-      ndviDelta: randomBetween(-0.05, 0.3),
-      verifier: randomChoice(["CarbonRush AI Engine", "Satellite V2.0", "Ground Team Alpha", "Partner Auditor"]),
-    });
-  }
-  return verifications.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-}
-
-// ===== Generate Market Orders =====
-export function generateMarketOrders(count: number = 50): MarketOrder[] {
-  const orders: MarketOrder[] = [];
-  for (let i = 0; i < count; i++) {
-    const quantity = randomInt(50, 5000);
-    const price = randomBetween(12, 42);
-    orders.push({
-      id: `MKT-${String(i + 1).padStart(5, "0")}`,
-      type: randomChoice(["buy", "sell"]),
-      quantity,
-      price: Math.round(price * 100) / 100,
-      total: Math.round(quantity * price),
-      buyer: randomChoice(BUYERS),
-      status: randomChoice(["filled", "filled", "open", "partial"]),
-      timestamp: generateDate(2024, 2025),
-    });
-  }
-  return orders.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-}
-
-// ===== Generate Fraud Alerts =====
-export function generateFraudAlerts(projects: Project[], count: number = 25): FraudAlert[] {
-  const FRAUD_TYPES = [
-    "Duplicate area claim detected",
-    "NDVI anomaly - possible deforestation",
-    "Carbon estimate exceeds baseline",
-    "Suspicious ownership transfer",
-    "Verification data inconsistency",
-    "Historical imagery mismatch",
-    "Overlapping project boundaries",
-    "Unverified sequestration claim",
-  ];
-
-  const alerts: FraudAlert[] = [];
-  for (let i = 0; i < count; i++) {
-    const project = randomChoice(projects);
-    const type = randomChoice(FRAUD_TYPES);
-    alerts.push({
-      id: `FRD-${String(i + 1).padStart(5, "0")}`,
-      projectId: project.id,
-      projectName: project.name,
-      severity: randomChoice(["low", "low", "medium", "medium", "high", "critical"]),
-      type,
-      description: `${type} for project ${project.name} in ${project.location}. Automated systems flagged this for review.`,
-      timestamp: generateDate(2024, 2025),
-      status: randomChoice(["investigating", "resolved", "resolved", "dismissed"]),
-    });
-  }
-  return alerts.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-}
-
-// ===== Time Series Data =====
-export function generateTimeSeriesData(months: number = 24): { month: string; carbon: number; credits: number; revenue: number; projects: number }[] {
-  const data = [];
-  const startDate = new Date(2024, 0, 1);
-  let cumulativeCarbon = 12500;
-  let cumulativeCredits = 8200;
-  let cumulativeRevenue = 245000;
-  let cumulativeProjects = 120;
-
-  for (let i = 0; i < months; i++) {
-    const date = new Date(startDate);
-    date.setMonth(date.getMonth() + i);
-    
-    cumulativeCarbon += randomInt(800, 3500);
-    cumulativeCredits += randomInt(400, 2000);
-    cumulativeRevenue += randomInt(20000, 150000);
-    cumulativeProjects += randomInt(5, 25);
-
-    data.push({
-      month: date.toLocaleDateString("en-US", { month: "short", year: "2-digit" }),
-      carbon: cumulativeCarbon,
-      credits: cumulativeCredits,
-      revenue: cumulativeRevenue,
-      projects: cumulativeProjects,
-    });
-  }
-  return data;
-}
-
-// ===== Market Price History =====
-export function generatePriceHistory(days: number = 90): { date: string; price: number; volume: number }[] {
-  const data = [];
-  let price = 24.5;
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - days);
-
-  for (let i = 0; i < days; i++) {
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + i);
-    price += randomBetween(-1.5, 2.0);
-    price = Math.max(15, Math.min(50, price));
-    
-    data.push({
-      date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      price: Math.round(price * 100) / 100,
-      volume: randomInt(5000, 50000),
-    });
-  }
-  return data;
-}
-
-// ===== KPI Summary =====
-export interface KPISummary {
-  totalCarbonVerified: number;
-  creditsIssued: number;
-  activeProjects: number;
-  carbonValueGenerated: number;
-  communitiesImpacted: number;
-  verificationAccuracy: number;
-  totalArea: number;
-  ngoPartners: number;
-  countriesReached: number;
-  blockchainTransactions: number;
-}
-
-export function generateKPISummary(): KPISummary {
-  return {
-    totalCarbonVerified: 847532,
-    creditsIssued: 623841,
-    activeProjects: 512,
-    carbonValueGenerated: 18750000,
-    communitiesImpacted: 2847,
-    verificationAccuracy: 97.3,
-    totalArea: 125000,
-    ngoPartners: 48,
-    countriesReached: 1,
-    blockchainTransactions: 45231,
-  };
-}
-
-// ===== NDVI Band Data =====
-export function generateNDVIData(): { month: string; ndvi: number; biomass: number; health: number }[] {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return months.map(month => ({
-    month,
-    ndvi: randomBetween(0.35, 0.85),
-    biomass: randomBetween(120, 340),
-    health: randomBetween(60, 95),
-  }));
-}
-
-// ===== Singleton Data Store =====
-let _projects: Project[] | null = null;
-let _credits: CarbonCredit[] | null = null;
-let _organizations: Organization[] | null = null;
-let _verifications: Verification[] | null = null;
-let _marketOrders: MarketOrder[] | null = null;
-let _fraudAlerts: FraudAlert[] | null = null;
-let _kpiSummary: KPISummary | null = null;
-let _timeSeries: ReturnType<typeof generateTimeSeriesData> | null = null;
-let _priceHistory: ReturnType<typeof generatePriceHistory> | null = null;
-
-export function getProjects(): Project[] {
-  if (!_projects) _projects = generateProjects(512);
-  return _projects;
-}
-
-export function getCredits(): CarbonCredit[] {
-  if (!_credits) _credits = generateCredits(getProjects(), 10240);
-  return _credits;
-}
-
-export function getOrganizations(): Organization[] {
-  if (!_organizations) _organizations = generateOrganizations();
-  return _organizations;
-}
-
-export function getVerifications(): Verification[] {
-  if (!_verifications) _verifications = generateVerifications(getProjects(), 120);
-  return _verifications;
-}
-
-export function getMarketOrders(): MarketOrder[] {
-  if (!_marketOrders) _marketOrders = generateMarketOrders(60);
-  return _marketOrders;
-}
-
-export function getFraudAlerts(): FraudAlert[] {
-  if (!_fraudAlerts) _fraudAlerts = generateFraudAlerts(getProjects(), 30);
-  return _fraudAlerts;
-}
-
-export function getKPISummary(): KPISummary {
-  if (!_kpiSummary) _kpiSummary = generateKPISummary();
-  return _kpiSummary;
-}
-
-export function getTimeSeries() {
-  if (!_timeSeries) _timeSeries = generateTimeSeriesData(24);
-  return _timeSeries;
-}
-
-export function getPriceHistory() {
-  if (!_priceHistory) _priceHistory = generatePriceHistory(90);
-  return _priceHistory;
-}

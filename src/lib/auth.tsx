@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import type { User, Session } from "@supabase/supabase-js";
 
 export type UserRole = "admin" | "user";
 
@@ -16,131 +17,147 @@ export interface UserProfile {
 
 interface AuthContextType {
   user: UserProfile | null;
+  session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
   signUp: (email: string, password: string, fullName: string, role: UserRole) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
+  session: null,
   loading: true,
   signIn: async () => ({}),
   signUp: async () => ({}),
   signOut: async () => {},
+  isAdmin: false,
 });
+
+function extractProfile(supabaseUser: User): UserProfile {
+  const meta = supabaseUser.user_metadata || {};
+  return {
+    id: supabaseUser.id,
+    email: supabaseUser.email || "",
+    full_name: meta.full_name || meta.name || supabaseUser.email?.split("@")[0] || "User",
+    role: (meta.role as UserRole) || "user",
+    avatar_url: meta.avatar_url || undefined,
+    created_at: supabaseUser.created_at,
+  };
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const handleSession = useCallback((sess: Session | null) => {
+    setSession(sess);
+    if (sess?.user) {
+      setUser(extractProfile(sess.user));
+    } else {
+      setUser(null);
+    }
+    setLoading(false);
+  }, []);
+
   useEffect(() => {
-    // Check for existing session
-    const checkSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        }
-      } catch {
-        // Supabase not configured yet — use demo mode
-        console.log("Using demo mode - Supabase not connected");
-      }
-      setLoading(false);
-    };
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session: sess } }) => {
+      handleSession(sess);
+    });
 
-    checkSession();
-
-    // Listen for auth changes
+    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        } else {
-          setUser(null);
-        }
-        setLoading(false);
+      (_event, sess) => {
+        handleSession(sess);
       }
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [handleSession]);
 
-  const fetchProfile = async (userId: string) => {
+  const signIn = async (email: string, password: string): Promise<{ error?: string }> => {
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      if (error) throw error;
-      setUser(data as UserProfile);
-    } catch {
-      console.log("Profile fetch failed - using demo data");
-    }
-  };
-
-  const signIn = async (email: string, password: string) => {
-    try {
-      // Demo mode - allow login without actual Supabase
-      if (email === "admin@carbonrush.ai" && password === "admin123") {
-        setUser({
-          id: "demo-admin",
-          email: "admin@carbonrush.ai",
-          full_name: "Admin User",
-          role: "admin",
-          created_at: new Date().toISOString(),
-        });
-        return {};
+      if (error) {
+        // If Supabase returns "Invalid login credentials", provide a clearer message
+        if (error.message.includes("Invalid login")) {
+          return { error: "Invalid email or password. Please sign up first if you don't have an account." };
+        }
+        return { error: error.message };
       }
-      if (email === "user@carbonrush.ai" && password === "user123") {
-        setUser({
-          id: "demo-user",
-          email: "user@carbonrush.ai",
-          full_name: "Demo User",
-          role: "user",
-          created_at: new Date().toISOString(),
-        });
-        return {};
-      }
-
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return { error: error.message };
-      return {};
-    } catch {
-      return { error: "Sign in failed" };
-    }
-  };
-
-  const signUp = async (email: string, password: string, fullName: string, role: UserRole) => {
-    try {
-      const { data, error } = await supabase.auth.signUp({ email, password });
-      if (error) return { error: error.message };
 
       if (data.user) {
-        // Create profile
-        const { error: profileError } = await supabase.from("profiles").insert({
-          id: data.user.id,
-          email,
-          full_name: fullName,
-          role,
-        });
-        if (profileError) console.error("Profile creation error:", profileError);
+        setUser(extractProfile(data.user));
+        setSession(data.session);
       }
       return {};
-    } catch {
-      return { error: "Sign up failed" };
+    } catch (err) {
+      return { error: "Connection failed. Please check your internet and try again." };
+    }
+  };
+
+  const signUp = async (
+    email: string,
+    password: string,
+    fullName: string,
+    role: UserRole
+  ): Promise<{ error?: string }> => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            role: role,
+          },
+        },
+      });
+
+      if (error) {
+        if (error.message.includes("already registered")) {
+          return { error: "This email is already registered. Please sign in instead." };
+        }
+        return { error: error.message };
+      }
+
+      // If email confirmation is disabled, user is logged in immediately
+      if (data.user && data.session) {
+        setUser(extractProfile(data.user));
+        setSession(data.session);
+      }
+
+      return {};
+    } catch (err) {
+      return { error: "Sign up failed. Please try again." };
     }
   };
 
   const signOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
+    setSession(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        session,
+        loading,
+        signIn,
+        signUp,
+        signOut,
+        isAdmin: user?.role === "admin",
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
