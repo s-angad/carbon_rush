@@ -184,20 +184,20 @@ const projectAnalytics: ProjectAnalytics[] = [
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const colorMap: Record<string, { bg: string; text: string; border: string; sparkline: string }> = {
-  emerald: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20', sparkline: '#10B981' },
-  sky: { bg: 'bg-sky-500/10', text: 'text-sky-400', border: 'border-sky-500/20', sparkline: '#0EA5E9' },
-  violet: { bg: 'bg-violet-500/10', text: 'text-violet-400', border: 'border-violet-500/20', sparkline: '#8B5CF6' },
-  amber: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20', sparkline: '#F59E0B' },
-  teal: { bg: 'bg-teal-500/10', text: 'text-teal-400', border: 'border-teal-500/20', sparkline: '#14B8A6' },
-  pink: { bg: 'bg-pink-500/10', text: 'text-pink-400', border: 'border-pink-500/20', sparkline: '#EC4899' },
-  green: { bg: 'bg-green-500/10', text: 'text-green-400', border: 'border-green-500/20', sparkline: '#22C55E' },
-  cyan: { bg: 'bg-cyan-500/10', text: 'text-cyan-400', border: 'border-cyan-500/20', sparkline: '#06B6D4' },
+  emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200', sparkline: '#10B981' },
+  sky: { bg: 'bg-sky-50', text: 'text-sky-600', border: 'border-sky-200', sparkline: '#0EA5E9' },
+  violet: { bg: 'bg-violet-50', text: 'text-violet-600', border: 'border-violet-200', sparkline: '#8B5CF6' },
+  amber: { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200', sparkline: '#F59E0B' },
+  teal: { bg: 'bg-teal-50', text: 'text-teal-600', border: 'border-teal-200', sparkline: '#14B8A6' },
+  pink: { bg: 'bg-pink-50', text: 'text-pink-600', border: 'border-pink-200', sparkline: '#EC4899' },
+  green: { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200', sparkline: '#22C55E' },
+  cyan: { bg: 'bg-cyan-50', text: 'text-cyan-600', border: 'border-cyan-200', sparkline: '#06B6D4' },
 }
 
 const statusColors: Record<string, string> = {
-  Active: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  Pending: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  'Under Review': 'bg-sky-500/10 text-sky-400 border-sky-500/20',
+  Active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  Pending: 'bg-amber-50 text-amber-700 border-amber-200',
+  'Under Review': 'bg-sky-50 text-sky-700 border-sky-200',
 }
 
 function formatNumber(n: number): string {
@@ -220,13 +220,13 @@ const itemVariants = {
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number; name: string; color: string }>; label?: string }) {
   if (!active || !payload) return null
   return (
-    <div className="rounded-xl bg-[#1E293B]/95 backdrop-blur-xl border border-white/10 px-4 py-3 shadow-2xl">
+    <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-lg">
       <p className="text-xs font-medium text-gray-400 mb-2">{label}</p>
       {payload.map((entry, i) => (
         <div key={i} className="flex items-center gap-2 text-xs">
           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-          <span className="text-gray-400">{entry.name}:</span>
-          <span className="font-semibold text-white">{entry.value.toLocaleString()}</span>
+          <span className="text-gray-500">{entry.name}:</span>
+          <span className="font-semibold text-gray-900">{entry.value.toLocaleString()}</span>
         </div>
       ))}
     </div>
@@ -304,10 +304,10 @@ export default function AnalyticsPage() {
             <BarChart3 size={22} className="text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
-              Analytics & Reports
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+              Analytics &amp; Reports
             </h1>
-            <p className="text-sm text-gray-400 mt-0.5">
+            <p className="text-sm text-gray-500 mt-0.5">
               Comprehensive carbon intelligence and reporting
             </p>
           </div>
@@ -315,15 +315,15 @@ export default function AnalyticsPage() {
 
         {/* Export Panel */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-50 border border-gray-200">
             <Calendar size={14} className="text-gray-400" />
-            <span className="text-xs text-gray-400">Jul 2024 – Jun 2026</span>
+            <span className="text-xs text-gray-500">Jul 2024 – Jun 2026</span>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 text-emerald-400 text-xs font-medium hover:from-emerald-500/20 hover:to-emerald-500/10 transition-all duration-200">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium hover:bg-emerald-100 transition-all duration-200">
             <Download size={14} />
             Download PDF
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500/10 to-sky-500/5 border border-sky-500/20 text-sky-400 text-xs font-medium hover:from-sky-500/20 hover:to-sky-500/10 transition-all duration-200">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-50 border border-sky-200 text-sky-700 text-xs font-medium hover:bg-sky-100 transition-all duration-200">
             <FileSpreadsheet size={14} />
             Download Excel
           </button>
@@ -335,7 +335,7 @@ export default function AnalyticsPage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
-        className="flex items-center gap-2 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] w-fit"
+        className="flex items-center gap-2 p-1 rounded-xl bg-gray-100 border border-gray-200 w-fit"
       >
         {reportTabs.map((tab) => {
           const Icon = tab.icon
@@ -345,13 +345,13 @@ export default function AnalyticsPage() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-                isActive ? 'text-white' : 'text-gray-500 hover:text-gray-300'
+                isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-white/[0.08] border border-white/[0.1] rounded-lg"
+                  className="absolute inset-0 bg-white border border-gray-200 rounded-lg shadow-sm"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
@@ -382,17 +382,17 @@ export default function AnalyticsPage() {
                 variants={itemVariants}
                 initial="hidden"
                 animate="show"
-                className="lg:col-span-2 rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] p-5"
+                className="lg:col-span-2 rounded-2xl bg-white border border-gray-200 p-5 shadow-sm"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-sm font-semibold text-white">Total Sequestration Over Time</h3>
-                    <p className="text-[11px] text-gray-500 mt-0.5">24-month trend in tCO₂e</p>
+                    <h3 className="text-sm font-semibold text-gray-900">Total Sequestration Over Time</h3>
+                    <p className="text-[11px] text-gray-400 mt-0.5">24-month trend in tCO₂e</p>
                   </div>
                   <div className="flex items-center gap-4 text-[11px]">
-                    <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /><span className="text-gray-400">Sequestered</span></div>
-                    <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-500" /><span className="text-gray-400">Verified</span></div>
-                    <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-violet-500" /><span className="text-gray-400">Retired</span></div>
+                    <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /><span className="text-gray-500">Sequestered</span></div>
+                    <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-500" /><span className="text-gray-500">Verified</span></div>
+                    <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-violet-500" /><span className="text-gray-500">Retired</span></div>
                   </div>
                 </div>
                 <div className="h-72">
@@ -400,21 +400,21 @@ export default function AnalyticsPage() {
                     <AreaChart data={monthlyData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
                       <defs>
                         <linearGradient id="seqGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#10B981" stopOpacity={0.3} />
-                          <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
+                          <stop offset="0%" stopColor="#10B981" stopOpacity={0.15} />
+                          <stop offset="100%" stopColor="#10B981" stopOpacity={0.02} />
                         </linearGradient>
                         <linearGradient id="verGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#0EA5E9" stopOpacity={0.2} />
-                          <stop offset="100%" stopColor="#0EA5E9" stopOpacity={0} />
+                          <stop offset="0%" stopColor="#0EA5E9" stopOpacity={0.12} />
+                          <stop offset="100%" stopColor="#0EA5E9" stopOpacity={0.02} />
                         </linearGradient>
                         <linearGradient id="retGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#8B5CF6" stopOpacity={0.15} />
-                          <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0} />
+                          <stop offset="0%" stopColor="#8B5CF6" stopOpacity={0.1} />
+                          <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0.02} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                      <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#6B7280' }} axisLine={false} tickLine={false} interval={3} />
-                      <YAxis tick={{ fontSize: 10, fill: '#6B7280' }} axisLine={false} tickLine={false} tickFormatter={(v: number) => formatNumber(v)} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#9CA3AF' }} axisLine={false} tickLine={false} interval={3} />
+                      <YAxis tick={{ fontSize: 10, fill: '#9CA3AF' }} axisLine={false} tickLine={false} tickFormatter={(v: number) => formatNumber(v)} />
                       <Tooltip content={<CustomTooltip />} />
                       <Area type="monotone" dataKey="sequestered" name="Sequestered" stroke="#10B981" strokeWidth={2} fill="url(#seqGradient)" />
                       <Area type="monotone" dataKey="verified" name="Verified" stroke="#0EA5E9" strokeWidth={2} fill="url(#verGradient)" />
@@ -429,11 +429,11 @@ export default function AnalyticsPage() {
                 variants={itemVariants}
                 initial="hidden"
                 animate="show"
-                className="rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] p-5"
+                className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm"
               >
                 <div className="mb-4">
-                  <h3 className="text-sm font-semibold text-white">Carbon by Project Type</h3>
-                  <p className="text-[11px] text-gray-500 mt-0.5">Distribution of verified carbon</p>
+                  <h3 className="text-sm font-semibold text-gray-900">Carbon by Project Type</h3>
+                  <p className="text-[11px] text-gray-400 mt-0.5">Distribution of verified carbon</p>
                 </div>
                 <div className="h-52">
                   <ResponsiveContainer width="100%" height="100%">
@@ -457,9 +457,9 @@ export default function AnalyticsPage() {
                           if (!active || !payload || !payload.length) return null
                           const data = payload[0]
                           return (
-                            <div className="rounded-lg bg-[#1E293B]/95 backdrop-blur-xl border border-white/10 px-3 py-2 shadow-xl">
-                              <p className="text-xs font-medium text-white">{data.name}</p>
-                              <p className="text-xs text-gray-400">{data.value}%</p>
+                            <div className="rounded-xl bg-white border border-gray-200 px-3 py-2 shadow-lg">
+                              <p className="text-xs font-medium text-gray-900">{data.name}</p>
+                              <p className="text-xs text-gray-500">{data.value}%</p>
                             </div>
                           )
                         }}
@@ -472,9 +472,9 @@ export default function AnalyticsPage() {
                     <div key={item.name} className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2">
                         <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                        <span className="text-gray-400">{item.name}</span>
+                        <span className="text-gray-600">{item.name}</span>
                       </div>
-                      <span className="font-semibold text-white">{item.value}%</span>
+                      <span className="font-semibold text-gray-900">{item.value}%</span>
                     </div>
                   ))}
                 </div>
@@ -488,23 +488,23 @@ export default function AnalyticsPage() {
                 variants={itemVariants}
                 initial="hidden"
                 animate="show"
-                className="rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] p-5"
+                className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm"
               >
                 <div className="mb-5">
-                  <h3 className="text-sm font-semibold text-white">Top 10 Projects by Carbon Verified</h3>
-                  <p className="text-[11px] text-gray-500 mt-0.5">Ranked by total tCO₂e verified</p>
+                  <h3 className="text-sm font-semibold text-gray-900">Top 10 Projects by Carbon Verified</h3>
+                  <p className="text-[11px] text-gray-400 mt-0.5">Ranked by total tCO₂e verified</p>
                 </div>
                 <div className="space-y-3">
                   {topProjects.map((project, index) => (
                     <div key={project.name} className="group">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono text-gray-600 w-4">{String(index + 1).padStart(2, '0')}</span>
-                          <span className="text-xs text-gray-300 group-hover:text-white transition-colors">{project.name}</span>
+                          <span className="text-[10px] font-mono text-gray-400 w-4">{String(index + 1).padStart(2, '0')}</span>
+                          <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">{project.name}</span>
                         </div>
-                        <span className="text-xs font-semibold text-white">{project.carbonVerified.toLocaleString()}</span>
+                        <span className="text-xs font-semibold text-gray-900">{project.carbonVerified.toLocaleString()}</span>
                       </div>
-                      <div className="relative h-2 rounded-full bg-white/[0.04] overflow-hidden ml-6">
+                      <div className="relative h-2 rounded-full bg-gray-100 overflow-hidden ml-6">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${project.percentage}%` }}
@@ -523,25 +523,25 @@ export default function AnalyticsPage() {
                 variants={itemVariants}
                 initial="hidden"
                 animate="show"
-                className="rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] p-5"
+                className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm"
               >
                 <div className="mb-6">
-                  <h3 className="text-sm font-semibold text-white">Monthly Verification Rate</h3>
-                  <p className="text-[11px] text-gray-500 mt-0.5">Percentage of submissions verified</p>
+                  <h3 className="text-sm font-semibold text-gray-900">Monthly Verification Rate</h3>
+                  <p className="text-[11px] text-gray-400 mt-0.5">Percentage of submissions verified</p>
                 </div>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={verificationRateData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                      <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#6B7280' }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 10, fill: '#6B7280' }} axisLine={false} tickLine={false} domain={[80, 100]} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 10, fill: '#9CA3AF' }} axisLine={false} tickLine={false} domain={[80, 100]} />
                       <Tooltip
                         content={({ active, payload, label }) => {
                           if (!active || !payload || !payload.length) return null
                           return (
-                            <div className="rounded-lg bg-[#1E293B]/95 backdrop-blur-xl border border-white/10 px-3 py-2 shadow-xl">
-                              <p className="text-xs font-medium text-gray-400">{label}</p>
-                              <p className="text-sm font-bold text-emerald-400">{payload[0].value}%</p>
+                            <div className="rounded-xl bg-white border border-gray-200 px-3 py-2 shadow-lg">
+                              <p className="text-xs font-medium text-gray-500">{label}</p>
+                              <p className="text-sm font-bold text-emerald-600">{payload[0].value}%</p>
                             </div>
                           )
                         }}
@@ -551,7 +551,7 @@ export default function AnalyticsPage() {
                           <Cell
                             key={index}
                             fill={entry.rate >= 93 ? '#10B981' : entry.rate >= 90 ? '#0EA5E9' : '#F59E0B'}
-                            fillOpacity={0.7}
+                            fillOpacity={0.8}
                           />
                         ))}
                       </Bar>
@@ -570,11 +570,11 @@ export default function AnalyticsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] p-12 text-center"
+            className="rounded-2xl bg-white border border-gray-200 p-12 text-center shadow-sm"
           >
-            <Globe size={48} className="text-sky-400/30 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">ESG Reports</h3>
-            <p className="text-sm text-gray-400 max-w-md mx-auto">Environmental, Social, and Governance reports with TCFD, SASB, and GRI framework alignment. Coming in Q3 2026.</p>
+            <Globe size={48} className="text-sky-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">ESG Reports</h3>
+            <p className="text-sm text-gray-500 max-w-md mx-auto">Environmental, Social, and Governance reports with TCFD, SASB, and GRI framework alignment. Coming in Q3 2026.</p>
           </motion.div>
         )}
 
@@ -585,11 +585,11 @@ export default function AnalyticsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] p-12 text-center"
+            className="rounded-2xl bg-white border border-gray-200 p-12 text-center shadow-sm"
           >
-            <ShieldCheck size={48} className="text-violet-400/30 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">Compliance Reports</h3>
-            <p className="text-sm text-gray-400 max-w-md mx-auto">Automated compliance reporting for EU ETS, CORSIA, and voluntary carbon market standards. Coming in Q3 2026.</p>
+            <ShieldCheck size={48} className="text-violet-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Compliance Reports</h3>
+            <p className="text-sm text-gray-500 max-w-md mx-auto">Automated compliance reporting for EU ETS, CORSIA, and voluntary carbon market standards. Coming in Q3 2026.</p>
           </motion.div>
         )}
 
@@ -600,11 +600,11 @@ export default function AnalyticsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] p-12 text-center"
+            className="rounded-2xl bg-white border border-gray-200 p-12 text-center shadow-sm"
           >
-            <Heart size={48} className="text-pink-400/30 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">Impact Reports</h3>
-            <p className="text-sm text-gray-400 max-w-md mx-auto">SDG-aligned impact measurement dashboards with community benefit tracking and biodiversity metrics. Coming in Q4 2026.</p>
+            <Heart size={48} className="text-pink-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Impact Reports</h3>
+            <p className="text-sm text-gray-500 max-w-md mx-auto">SDG-aligned impact measurement dashboards with community benefit tracking and biodiversity metrics. Coming in Q4 2026.</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -616,12 +616,12 @@ export default function AnalyticsPage() {
         transition={{ duration: 0.5, delay: 0.3 }}
       >
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-            <TrendingUp size={16} className="text-emerald-400" />
+          <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+            <TrendingUp size={16} className="text-emerald-600" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-white">Key Metrics</h2>
-            <p className="text-[11px] text-gray-500">Platform performance indicators</p>
+            <h2 className="text-sm font-semibold text-gray-900">Key Metrics</h2>
+            <p className="text-[11px] text-gray-400">Platform performance indicators</p>
           </div>
         </div>
 
@@ -638,7 +638,7 @@ export default function AnalyticsPage() {
               <motion.div
                 key={metric.label}
                 variants={itemVariants}
-                className="group rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] p-4 hover:border-white/[0.12] transition-all duration-300"
+                className="group rounded-2xl bg-white border border-gray-200 p-4 hover:border-gray-300 hover:shadow-md transition-all duration-300"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className={`w-9 h-9 rounded-xl ${colors.bg} flex items-center justify-center`}>
@@ -646,15 +646,15 @@ export default function AnalyticsPage() {
                   </div>
                   <Sparkline data={metric.sparkline} color={colors.sparkline} />
                 </div>
-                <p className="text-lg font-bold text-white">{metric.value}</p>
-                <p className="text-[11px] text-gray-500 mt-0.5">{metric.label}</p>
+                <p className="text-lg font-bold text-gray-900">{metric.value}</p>
+                <p className="text-[11px] text-gray-400 mt-0.5">{metric.label}</p>
                 <div className="flex items-center gap-1 mt-2">
                   {metric.trend === 'up' ? (
-                    <TrendingUp size={12} className="text-emerald-400" />
+                    <TrendingUp size={12} className="text-emerald-600" />
                   ) : (
-                    <TrendingDown size={12} className="text-emerald-400" />
+                    <TrendingDown size={12} className="text-emerald-600" />
                   )}
-                  <span className="text-[11px] font-medium text-emerald-400">{metric.change}</span>
+                  <span className="text-[11px] font-medium text-emerald-600">{metric.change}</span>
                 </div>
               </motion.div>
             )
@@ -667,29 +667,29 @@ export default function AnalyticsPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] overflow-hidden"
+        className="rounded-2xl bg-white border border-gray-200 overflow-hidden shadow-sm"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 border-b border-white/[0.06]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
-              <FileText size={16} className="text-violet-400" />
+            <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center">
+              <FileText size={16} className="text-violet-600" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-white">Project-Level Analytics</h2>
-              <p className="text-[11px] text-gray-500">Detailed project performance data</p>
+              <h2 className="text-sm font-semibold text-gray-900">Project-Level Analytics</h2>
+              <p className="text-[11px] text-gray-400">Detailed project performance data</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Search */}
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] w-48">
-              <Search size={14} className="text-gray-500 flex-shrink-0" />
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 w-48">
+              <Search size={14} className="text-gray-400 flex-shrink-0" />
               <input
                 type="text"
                 placeholder="Search projects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent text-xs text-white placeholder-gray-500 outline-none w-full"
+                className="bg-transparent text-xs text-gray-900 placeholder-gray-400 outline-none w-full"
               />
             </div>
 
@@ -698,15 +698,15 @@ export default function AnalyticsPage() {
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                className="appearance-none flex items-center gap-2 px-3 py-2 pr-8 rounded-lg bg-white/[0.04] border border-white/[0.08] text-xs text-gray-400 cursor-pointer outline-none hover:border-white/[0.15] transition-colors"
+                className="appearance-none flex items-center gap-2 px-3 py-2 pr-8 rounded-lg bg-gray-50 border border-gray-200 text-xs text-gray-600 cursor-pointer outline-none hover:border-gray-300 transition-colors"
               >
                 {projectTypes.map((type) => (
-                  <option key={type} value={type} className="bg-[#1E293B] text-white">
+                  <option key={type} value={type} className="bg-white text-gray-900">
                     {type}
                   </option>
                 ))}
               </select>
-              <Filter size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+              <Filter size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             </div>
           </div>
         </div>
@@ -714,7 +714,7 @@ export default function AnalyticsPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/[0.04]">
+              <tr className="border-b border-gray-100">
                 {[
                   { key: 'name' as const, label: 'Project Name' },
                   { key: 'type' as const, label: 'Type' },
@@ -728,7 +728,7 @@ export default function AnalyticsPage() {
                   <th
                     key={col.key}
                     onClick={() => toggleSort(col.key)}
-                    className="text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider px-4 py-3 cursor-pointer hover:text-gray-300 transition-colors select-none"
+                    className="text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider px-4 py-3 cursor-pointer hover:text-gray-600 transition-colors select-none"
                   >
                     <div className="flex items-center gap-1">
                       {col.label}
@@ -749,43 +749,43 @@ export default function AnalyticsPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.03 * index }}
-                  className="group border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors duration-200"
+                  className="group border-b border-gray-50 hover:bg-gray-50 transition-colors duration-200"
                 >
                   <td className="px-4 py-3">
-                    <span className="text-xs font-medium text-white group-hover:text-emerald-300 transition-colors">
+                    <span className="text-xs font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
                       {project.name}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-xs text-gray-400">{project.type}</span>
+                    <span className="text-xs text-gray-600">{project.type}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-xs text-gray-400">{project.location}</span>
+                    <span className="text-xs text-gray-600">{project.location}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-xs font-semibold text-white">{project.carbonVerified.toLocaleString()} tCO₂e</span>
+                    <span className="text-xs font-semibold text-gray-900">{project.carbonVerified.toLocaleString()} tCO₂e</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-xs text-gray-300">{project.credits.toLocaleString()}</span>
+                    <span className="text-xs text-gray-600">{project.credits.toLocaleString()}</span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-16 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                      <div className="w-16 h-1.5 rounded-full bg-gray-100 overflow-hidden">
                         <div
                           className="h-full rounded-full bg-emerald-500"
                           style={{ width: `${project.verificationRate}%` }}
                         />
                       </div>
-                      <span className="text-xs text-gray-400">{project.verificationRate}%</span>
+                      <span className="text-xs text-gray-600">{project.verificationRate}%</span>
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border ${statusColors[project.status] || 'bg-white/5 text-gray-400 border-white/10'}`}>
+                    <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border ${statusColors[project.status] || 'bg-gray-50 text-gray-500 border-gray-200'}`}>
                       {project.status}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-xs text-gray-500">{project.lastUpdated}</span>
+                    <span className="text-xs text-gray-400">{project.lastUpdated}</span>
                   </td>
                 </motion.tr>
               ))}
@@ -795,8 +795,8 @@ export default function AnalyticsPage() {
 
         {filteredProjects.length === 0 && (
           <div className="py-12 text-center">
-            <Search size={32} className="text-gray-600 mx-auto mb-3" />
-            <p className="text-sm text-gray-500">No projects match your search criteria</p>
+            <Search size={32} className="text-gray-300 mx-auto mb-3" />
+            <p className="text-sm text-gray-400">No projects match your search criteria</p>
           </div>
         )}
       </motion.div>

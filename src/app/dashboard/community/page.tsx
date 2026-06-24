@@ -75,14 +75,14 @@ const onboardingSteps = [
   { step: 4, title: "Review", desc: "Review and submit for verification", active: false },
 ];
 
-const rankColors = ["text-amber-400", "text-gray-300", "text-amber-600"];
+const rankColors = ["text-amber-500", "text-gray-400", "text-amber-700"];
 
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-[#1E293B] border border-white/10 rounded-lg p-3 shadow-xl">
+    <div className="bg-white border border-gray-200 shadow-lg rounded-xl p-3">
       <p className="text-gray-400 text-xs mb-1">{label}</p>
-      <p className="text-sm font-medium text-emerald-400">₹{(payload[0].value / 100000).toFixed(1)}L</p>
+      <p className="text-sm font-medium text-emerald-600">₹{(payload[0].value / 100000).toFixed(1)}L</p>
     </div>
   );
 }
@@ -93,18 +93,18 @@ export default function CommunityPage() {
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ ease: "easeOut" }} className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-teal-500 flex items-center justify-center">
           <Users className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Community Portal</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Community Portal</h1>
           <p className="text-sm text-gray-400">Empowering coastal communities with carbon finance</p>
         </div>
       </motion.div>
 
       {/* Impact Stats */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, ease: "easeOut" }} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "Communities Onboarded", value: "2,847", icon: Users, color: "from-sky-500 to-sky-600" },
           { label: "Total Earnings", value: "₹14.2 Cr", icon: IndianRupee, color: "from-emerald-500 to-emerald-600" },
@@ -115,13 +115,13 @@ export default function CommunityPage() {
             key={i}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 + i * 0.05 }}
-            className="p-5 rounded-2xl bg-[#1E293B]/50 backdrop-blur-xl border border-white/[0.06] card-hover"
+            transition={{ delay: 0.15 + i * 0.05, ease: "easeOut" }}
+            className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
           >
             <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3`}>
               <stat.icon className="w-5 h-5 text-white" />
             </div>
-            <div className="text-2xl font-bold text-white">{stat.value}</div>
+            <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
             <div className="text-sm text-gray-400">{stat.label}</div>
           </motion.div>
         ))}
@@ -133,19 +133,19 @@ export default function CommunityPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="lg:col-span-2 p-6 rounded-2xl bg-[#1E293B]/50 backdrop-blur-xl border border-white/[0.06]"
+          transition={{ delay: 0.3, ease: "easeOut" }}
+          className="lg:col-span-2 p-6 rounded-2xl bg-white border border-gray-200 shadow-sm"
         >
           <div className="flex items-center gap-2 mb-4">
-            <Trophy className="w-5 h-5 text-amber-400" />
-            <h3 className="text-lg font-semibold text-white">Community Leaderboard</h3>
+            <Trophy className="w-5 h-5 text-amber-500" />
+            <h3 className="text-lg font-semibold text-gray-900">Community Leaderboard</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/[0.06]">
+                <tr className="border-b border-gray-100">
                   {["#", "Community", "Location", "Projects", "Credits", "Earnings"].map(h => (
-                    <th key={h} className="text-left text-xs text-gray-500 font-medium pb-3 px-2">{h}</th>
+                    <th key={h} className="text-left text-xs text-gray-400 uppercase tracking-wider font-medium pb-3 px-2">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -155,23 +155,23 @@ export default function CommunityPage() {
                     key={i}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 + i * 0.03 }}
-                    className={`border-b border-white/[0.02] hover:bg-white/[0.02] transition-colors ${i < 3 ? "bg-white/[0.01]" : ""}`}
+                    transition={{ delay: 0.4 + i * 0.03, ease: "easeOut" }}
+                    className={`border-b border-gray-50 hover:bg-gray-50 transition-colors ${i < 3 ? "bg-gray-50/50" : ""}`}
                   >
                     <td className="py-3 px-2">
-                      <span className={`text-sm font-bold ${i < 3 ? rankColors[i] : "text-gray-500"}`}>
+                      <span className={`text-sm font-bold ${i < 3 ? rankColors[i] : "text-gray-400"}`}>
                         {entry.rank}
                       </span>
                     </td>
-                    <td className="py-3 px-2 text-sm text-white font-medium">{entry.name}</td>
+                    <td className="py-3 px-2 text-sm text-gray-900 font-medium">{entry.name}</td>
                     <td className="py-3 px-2">
                       <span className="flex items-center gap-1 text-xs text-gray-400">
                         <MapPin className="w-3 h-3" />{entry.location}
                       </span>
                     </td>
-                    <td className="py-3 px-2 text-sm text-white">{entry.projects}</td>
-                    <td className="py-3 px-2 text-sm text-emerald-400 font-medium">{entry.credits.toLocaleString()}</td>
-                    <td className="py-3 px-2 text-sm text-white">₹{(entry.earnings / 100000).toFixed(1)}L</td>
+                    <td className="py-3 px-2 text-sm text-gray-900">{entry.projects}</td>
+                    <td className="py-3 px-2 text-sm text-emerald-600 font-medium">{entry.credits.toLocaleString()}</td>
+                    <td className="py-3 px-2 text-sm text-gray-900">₹{(entry.earnings / 100000).toFixed(1)}L</td>
                   </motion.tr>
                 ))}
               </tbody>
@@ -183,15 +183,15 @@ export default function CommunityPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="p-6 rounded-2xl bg-[#1E293B]/50 backdrop-blur-xl border border-white/[0.06]"
+          transition={{ delay: 0.4, ease: "easeOut" }}
+          className="p-6 rounded-2xl bg-white border border-gray-200 shadow-sm"
         >
-          <h3 className="text-lg font-semibold text-white mb-4">Project Onboarding</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Onboarding</h3>
           {/* Progress */}
           <div className="flex items-center gap-1 mb-6">
             {onboardingSteps.map((s, i) => (
               <div key={i} className="flex-1 flex items-center gap-1">
-                <div className={`w-full h-1.5 rounded-full ${s.active ? "bg-emerald-500" : "bg-white/10"}`} />
+                <div className={`w-full h-1.5 rounded-full ${s.active ? "bg-emerald-500" : "bg-gray-100"}`} />
               </div>
             ))}
           </div>
@@ -200,16 +200,16 @@ export default function CommunityPage() {
           {/* Steps */}
           <div className="space-y-3">
             {onboardingSteps.map((s, i) => (
-              <div key={i} className={`p-3 rounded-xl border transition-all ${s.active ? "bg-emerald-500/5 border-emerald-500/20" : "bg-[#0F172A]/30 border-white/[0.04]"}`}>
+              <div key={i} className={`p-3 rounded-xl border transition-all ${s.active ? "bg-emerald-50 border-emerald-200" : "bg-gray-50 border-gray-100"}`}>
                 <div className="flex items-center gap-3">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${s.active ? "bg-emerald-500 text-white" : "bg-white/10 text-gray-500"}`}>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${s.active ? "bg-emerald-500 text-white" : "bg-gray-200 text-gray-400"}`}>
                     {s.step}
                   </div>
                   <div>
-                    <p className={`text-sm font-medium ${s.active ? "text-white" : "text-gray-500"}`}>{s.title}</p>
-                    <p className="text-xs text-gray-500">{s.desc}</p>
+                    <p className={`text-sm font-medium ${s.active ? "text-gray-900" : "text-gray-400"}`}>{s.title}</p>
+                    <p className="text-xs text-gray-400">{s.desc}</p>
                   </div>
-                  <ChevronRight className={`w-4 h-4 ml-auto ${s.active ? "text-emerald-400" : "text-gray-600"}`} />
+                  <ChevronRight className={`w-4 h-4 ml-auto ${s.active ? "text-emerald-600" : "text-gray-300"}`} />
                 </div>
               </div>
             ))}
@@ -217,14 +217,14 @@ export default function CommunityPage() {
 
           {/* Form fields for step 1 */}
           <div className="mt-4 space-y-3">
-            <input placeholder="Project Name" className="w-full px-3 py-2.5 rounded-xl bg-[#0F172A]/60 border border-white/[0.06] text-sm text-white placeholder-gray-500 outline-none focus:border-emerald-500/30" />
-            <select className="w-full px-3 py-2.5 rounded-xl bg-[#0F172A]/60 border border-white/[0.06] text-sm text-gray-400 outline-none">
+            <input placeholder="Project Name" className="w-full px-3 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20" />
+            <select className="w-full px-3 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-600 outline-none focus:border-emerald-500">
               <option>Select Ecosystem Type</option>
               <option>Mangrove</option>
               <option>Wetland</option>
               <option>Seagrass</option>
             </select>
-            <button className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 text-white text-sm font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all">
+            <button className="w-full py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 hover:shadow-md transition-all">
               Continue →
             </button>
           </div>
@@ -237,18 +237,18 @@ export default function CommunityPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="p-6 rounded-2xl bg-[#1E293B]/50 backdrop-blur-xl border border-white/[0.06]"
+          transition={{ delay: 0.5, ease: "easeOut" }}
+          className="p-6 rounded-2xl bg-white border border-gray-200 shadow-sm"
         >
-          <h3 className="text-lg font-semibold text-white mb-1">Community Earnings</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">Community Earnings</h3>
           <p className="text-sm text-gray-400 mb-4">Monthly payout distribution</p>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={earningsData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" />
-              <XAxis dataKey="month" tick={{ fill: "#64748B", fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "#64748B", fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `${(v / 100000).toFixed(0)}L`} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.04)" />
+              <XAxis dataKey="month" tick={{ fill: "#9CA3AF", fontSize: 10 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: "#9CA3AF", fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `${(v / 100000).toFixed(0)}L`} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="earnings" fill="#10B981" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="earnings" fill="#059669" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </motion.div>
@@ -257,26 +257,26 @@ export default function CommunityPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="p-6 rounded-2xl bg-[#1E293B]/50 backdrop-blur-xl border border-white/[0.06]"
+          transition={{ delay: 0.6, ease: "easeOut" }}
+          className="p-6 rounded-2xl bg-white border border-gray-200 shadow-sm"
         >
-          <h3 className="text-lg font-semibold text-white mb-4">Payout Tracking</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Payout Tracking</h3>
           <div className="space-y-4">
             {payouts.map((p, i) => (
               <div key={i} className="flex items-center gap-3">
                 <div className="flex flex-col items-center">
                   <div className={`w-3 h-3 rounded-full ${p.status === "completed" ? "bg-emerald-500" : "bg-amber-500"}`} />
-                  {i < payouts.length - 1 && <div className="w-0.5 h-8 bg-white/10" />}
+                  {i < payouts.length - 1 && <div className="w-0.5 h-8 bg-gray-100" />}
                 </div>
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="text-sm text-white font-medium">{p.recipient}</p>
-                      <p className="text-xs text-gray-500">{p.date}</p>
+                      <p className="text-sm text-gray-900 font-medium">{p.recipient}</p>
+                      <p className="text-xs text-gray-400">{p.date}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-emerald-400 font-semibold">₹{(p.amount / 1000).toFixed(0)}K</p>
-                      <span className={`text-xs ${p.status === "completed" ? "text-emerald-400" : "text-amber-400"}`}>
+                      <p className="text-sm text-emerald-600 font-semibold">₹{(p.amount / 1000).toFixed(0)}K</p>
+                      <span className={`text-xs ${p.status === "completed" ? "text-emerald-600" : "text-amber-500"}`}>
                         {p.status === "completed" ? "✓ Completed" : "⏳ Pending"}
                       </span>
                     </div>
@@ -291,8 +291,8 @@ export default function CommunityPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="p-6 rounded-2xl bg-[#1E293B]/50 backdrop-blur-xl border border-white/[0.06] flex flex-col"
+          transition={{ delay: 0.7, ease: "easeOut" }}
+          className="p-6 rounded-2xl bg-white border border-gray-200 shadow-sm flex flex-col"
         >
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -300,8 +300,8 @@ export default function CommunityPage() {
                 <Bot className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-white">AI Copilot</h3>
-                <p className="text-xs text-emerald-400">Online</p>
+                <h3 className="text-sm font-semibold text-gray-900">AI Copilot</h3>
+                <p className="text-xs text-emerald-600">Online</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -309,10 +309,10 @@ export default function CommunityPage() {
               <select
                 value={selectedLang}
                 onChange={e => setSelectedLang(e.target.value)}
-                className="bg-transparent text-xs text-gray-400 outline-none cursor-pointer"
+                className="bg-transparent text-xs text-gray-500 outline-none cursor-pointer"
               >
                 {["English", "Hindi", "Tamil", "Bengali", "Malayalam", "Gujarati"].map(l => (
-                  <option key={l} className="bg-[#1E293B]">{l}</option>
+                  <option key={l} className="bg-white">{l}</option>
                 ))}
               </select>
             </div>
@@ -325,13 +325,13 @@ export default function CommunityPage() {
                 key={i}
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 + i * 0.1 }}
+                transition={{ delay: 0.8 + i * 0.1, ease: "easeOut" }}
                 className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-emerald-500/20 text-emerald-100 rounded-br-sm"
-                    : "bg-[#0F172A]/60 text-gray-300 rounded-bl-sm border border-white/[0.04]"
+                    ? "bg-emerald-600 text-white rounded-br-sm"
+                    : "bg-gray-50 text-gray-600 rounded-bl-sm border border-gray-100"
                 }`}>
                   <p className="whitespace-pre-line">{msg.text}</p>
                 </div>
@@ -343,9 +343,9 @@ export default function CommunityPage() {
           <div className="flex gap-2">
             <input
               placeholder="Type your message..."
-              className="flex-1 px-4 py-2.5 rounded-xl bg-[#0F172A]/60 border border-white/[0.06] text-sm text-white placeholder-gray-500 outline-none focus:border-emerald-500/30"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
             />
-            <button className="p-2.5 rounded-xl bg-emerald-500 text-white hover:bg-emerald-600 transition-colors">
+            <button className="p-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
               <Send className="w-4 h-4" />
             </button>
           </div>

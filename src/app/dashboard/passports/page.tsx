@@ -1,622 +1,167 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from "framer-motion";
 import {
-  MapPin,
-  Leaf,
-  ShieldCheck,
-  Hash,
-  CalendarDays,
-  User,
-  Coins,
-  CheckCircle2,
-  Clock,
-  Zap,
-  Fingerprint,
-  Globe,
-} from 'lucide-react';
+  Leaf, Shield, CheckCircle2, Clock, ExternalLink,
+  MapPin, Calendar, TrendingUp, Search, Filter,
+} from "lucide-react";
+import { useState } from "react";
 
-/* ─────────────────────────  TYPES  ───────────────────────── */
-
-type PassportStatus = 'verified' | 'active' | 'pending';
-type ProjectType = 'Mangrove' | 'Wetland' | 'Seagrass' | 'Coral' | 'Saltmarsh';
-
-interface CarbonPassport {
-  id: string;
-  carbonId: string;
-  projectName: string;
-  projectType: ProjectType;
-  location: string;
-  carbonVerified: number;   // tCO₂e
-  creditsIssued: number;
-  verificationScore: number; // 0-100
-  blockchainHash: string;
-  status: PassportStatus;
-  owner: string;
-  issueDate: string;
-}
-
-/* ─────────────────────────  DATA  ────────────────────────── */
-
-const passports: CarbonPassport[] = [
-  {
-    id: '1',
-    carbonId: 'CRP-00142',
-    projectName: 'Sundarbans Mangrove Shield',
-    projectType: 'Mangrove',
-    location: 'Sundarbans, West Bengal',
-    carbonVerified: 24_850,
-    creditsIssued: 22_365,
-    verificationScore: 97,
-    blockchainHash: '0x8a3f…d42e1b',
-    status: 'verified',
-    owner: 'BlueTide Conservation Ltd.',
-    issueDate: '2025-11-12',
-  },
-  {
-    id: '2',
-    carbonId: 'CRP-00178',
-    projectName: 'Pichavaram Delta Corridor',
-    projectType: 'Mangrove',
-    location: 'Pichavaram, Tamil Nadu',
-    carbonVerified: 18_400,
-    creditsIssued: 16_560,
-    verificationScore: 94,
-    blockchainHash: '0x1b7e…f93a04',
-    status: 'verified',
-    owner: 'ClimaRoots India Pvt.',
-    issueDate: '2025-09-28',
-  },
-  {
-    id: '3',
-    carbonId: 'CRP-00215',
-    projectName: 'Chilika Seagrass Preserve',
-    projectType: 'Seagrass',
-    location: 'Chilika Lake, Odisha',
-    carbonVerified: 12_100,
-    creditsIssued: 10_890,
-    verificationScore: 91,
-    blockchainHash: '0x4d2c…71eb9f',
-    status: 'active',
-    owner: 'Oceanic Carbon Trust',
-    issueDate: '2025-12-05',
-  },
-  {
-    id: '4',
-    carbonId: 'CRP-00263',
-    projectName: 'Gulf of Kutch Coral Bank',
-    projectType: 'Coral',
-    location: 'Gulf of Kutch, Gujarat',
-    carbonVerified: 9_750,
-    creditsIssued: 8_775,
-    verificationScore: 88,
-    blockchainHash: '0xf0a8…5ce3d7',
-    status: 'active',
-    owner: 'Reef Genesis Foundation',
-    issueDate: '2026-01-17',
-  },
-  {
-    id: '5',
-    carbonId: 'CRP-00301',
-    projectName: 'Vembanad Wetland Nexus',
-    projectType: 'Wetland',
-    location: 'Vembanad, Kerala',
-    carbonVerified: 15_300,
-    creditsIssued: 13_770,
-    verificationScore: 93,
-    blockchainHash: '0x7e91…a2d0c4',
-    status: 'verified',
-    owner: 'GreenDelta Eco Ventures',
-    issueDate: '2025-08-03',
-  },
-  {
-    id: '6',
-    carbonId: 'CRP-00329',
-    projectName: 'Bhitarkanika Saltmarsh Ring',
-    projectType: 'Saltmarsh',
-    location: 'Bhitarkanika, Odisha',
-    carbonVerified: 7_200,
-    creditsIssued: 6_480,
-    verificationScore: 85,
-    blockchainHash: '0xc3f4…9b01ea',
-    status: 'pending',
-    owner: 'TerraBlue Holdings',
-    issueDate: '2026-03-22',
-  },
-  {
-    id: '7',
-    carbonId: 'CRP-00347',
-    projectName: 'Lakshadweep Coral Sanctuary',
-    projectType: 'Coral',
-    location: 'Lakshadweep Islands',
-    carbonVerified: 11_600,
-    creditsIssued: 10_440,
-    verificationScore: 90,
-    blockchainHash: '0x2a6d…e8f753',
-    status: 'active',
-    owner: 'IslandCarbon Collective',
-    issueDate: '2026-02-10',
-  },
-  {
-    id: '8',
-    carbonId: 'CRP-00384',
-    projectName: 'Pulicat Seagrass Meadow',
-    projectType: 'Seagrass',
-    location: 'Pulicat, Andhra Pradesh',
-    carbonVerified: 8_950,
-    creditsIssued: 5_370,
-    verificationScore: 72,
-    blockchainHash: '0x59b1…3ca7d0',
-    status: 'pending',
-    owner: 'Coastal Carbon Co-op',
-    issueDate: '2026-04-14',
-  },
-  {
-    id: '9',
-    carbonId: 'CRP-00412',
-    projectName: 'Coringa Mangrove Haven',
-    projectType: 'Mangrove',
-    location: 'Coringa, Andhra Pradesh',
-    carbonVerified: 20_100,
-    creditsIssued: 18_090,
-    verificationScore: 96,
-    blockchainHash: '0xe7f2…41bc86',
-    status: 'verified',
-    owner: 'EcoShore India Ltd.',
-    issueDate: '2025-10-30',
-  },
+const passports = [
+  { id: "CRP-00001", project: "Sundarbans Mangrove Delta", type: "Mangrove", location: "West Bengal", carbon: 12450, status: "verified", health: 94, vintage: 2024, nftId: "#4521", color: "emerald" },
+  { id: "CRP-00002", project: "Gulf of Kutch Marine", type: "Wetland", location: "Gujarat", carbon: 8920, status: "verified", health: 87, vintage: 2024, nftId: "#4522", color: "sky" },
+  { id: "CRP-00003", project: "Pichavaram Seagrass", type: "Seagrass", location: "Tamil Nadu", carbon: 6340, status: "pending", health: 91, vintage: 2024, nftId: "#4523", color: "teal" },
+  { id: "CRP-00004", project: "Chilika Lake Reserve", type: "Wetland", location: "Odisha", carbon: 15200, status: "verified", health: 92, vintage: 2024, nftId: "#4524", color: "sky" },
+  { id: "CRP-00005", project: "Bhitarkanika Corridor", type: "Mangrove", location: "Odisha", carbon: 9870, status: "verified", health: 89, vintage: 2023, nftId: "#4525", color: "emerald" },
+  { id: "CRP-00006", project: "Coringa Wildlife", type: "Mangrove", location: "Andhra Pradesh", carbon: 7650, status: "in_review", health: 85, vintage: 2024, nftId: "#4526", color: "emerald" },
+  { id: "CRP-00007", project: "Vembanad Wetlands", type: "Wetland", location: "Kerala", carbon: 4890, status: "verified", health: 88, vintage: 2023, nftId: "#4527", color: "sky" },
+  { id: "CRP-00008", project: "Muthupet Lagoon", type: "Wetland", location: "Tamil Nadu", carbon: 5430, status: "verified", health: 83, vintage: 2024, nftId: "#4528", color: "sky" },
+  { id: "CRP-00009", project: "Godavari Delta", type: "Mangrove", location: "Andhra Pradesh", carbon: 8200, status: "verified", health: 90, vintage: 2025, nftId: "#4529", color: "emerald" },
 ];
 
-/* ─────────────────────  HELPERS  ──────────────────────────── */
-
-const filterTabs = ['All', 'Active', 'Verified', 'Pending'] as const;
-type FilterTab = (typeof filterTabs)[number];
-
-const statusConfig: Record<
-  PassportStatus,
-  { label: string; color: string; bg: string; icon: React.ReactNode }
-> = {
-  verified: {
-    label: 'Verified',
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/15 border-emerald-500/30',
-    icon: <ShieldCheck className="w-3.5 h-3.5" />,
-  },
-  active: {
-    label: 'Active',
-    color: 'text-sky-400',
-    bg: 'bg-sky-500/15 border-sky-500/30',
-    icon: <Zap className="w-3.5 h-3.5" />,
-  },
-  pending: {
-    label: 'Pending',
-    color: 'text-amber-400',
-    bg: 'bg-amber-500/15 border-amber-500/30',
-    icon: <Clock className="w-3.5 h-3.5" />,
-  },
+const typeColors: Record<string, { bg: string; text: string }> = {
+  Mangrove: { bg: "bg-emerald-50", text: "text-emerald-700" },
+  Wetland: { bg: "bg-sky-50", text: "text-sky-700" },
+  Seagrass: { bg: "bg-teal-50", text: "text-teal-700" },
 };
 
-const typeColors: Record<ProjectType, string> = {
-  Mangrove: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25',
-  Wetland: 'bg-cyan-500/15 text-cyan-400 border-cyan-500/25',
-  Seagrass: 'bg-teal-500/15 text-teal-400 border-teal-500/25',
-  Coral: 'bg-rose-500/15 text-rose-400 border-rose-500/25',
-  Saltmarsh: 'bg-lime-500/15 text-lime-400 border-lime-500/25',
+const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
+  verified: { bg: "bg-emerald-50", text: "text-emerald-700", label: "Verified" },
+  pending: { bg: "bg-amber-50", text: "text-amber-700", label: "Pending" },
+  in_review: { bg: "bg-sky-50", text: "text-sky-700", label: "In Review" },
 };
 
-function formatNumber(n: number) {
-  return n.toLocaleString('en-IN');
-}
+export default function PassportsPage() {
+  const [search, setSearch] = useState("");
+  const [filterType, setFilterType] = useState("All");
 
-/* ──────────  Circular Progress (SVG)  ─────────────────────── */
-
-function CircularScore({ score }: { score: number }) {
-  const radius = 28;
-  const stroke = 4;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 100) * circumference;
-
-  const color =
-    score >= 90
-      ? '#10B981'
-      : score >= 80
-        ? '#0EA5E9'
-        : score >= 70
-          ? '#F59E0B'
-          : '#EF4444';
+  const filtered = passports.filter((p) => {
+    const matchSearch = p.project.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase());
+    const matchType = filterType === "All" || p.type === filterType;
+    return matchSearch && matchType;
+  });
 
   return (
-    <div className="relative flex items-center justify-center w-[72px] h-[72px]">
-      <svg
-        width={72}
-        height={72}
-        viewBox="0 0 72 72"
-        className="transform -rotate-90"
-      >
-        <circle
-          cx="36"
-          cy="36"
-          r={radius}
-          fill="none"
-          stroke="rgba(255,255,255,0.06)"
-          strokeWidth={stroke}
-        />
-        <motion.circle
-          cx="36"
-          cy="36"
-          r={radius}
-          fill="none"
-          stroke={color}
-          strokeWidth={stroke}
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset: offset }}
-          transition={{ duration: 1.2, ease: 'easeOut' }}
-        />
-      </svg>
-      <span
-        className="absolute text-sm font-bold"
-        style={{ color }}
-      >
-        {score}
-      </span>
-    </div>
-  );
-}
-
-/* ──────────  QR Code Placeholder  ─────────────────────────── */
-
-function QrGrid() {
-  // Generate an 7×7 deterministic grid pattern
-  const pattern = [
-    [1, 1, 1, 0, 1, 1, 1],
-    [1, 0, 1, 0, 1, 0, 1],
-    [1, 1, 1, 0, 1, 1, 1],
-    [0, 0, 0, 1, 0, 0, 0],
-    [1, 1, 1, 0, 1, 1, 1],
-    [1, 0, 1, 1, 1, 0, 1],
-    [1, 1, 1, 0, 1, 1, 1],
-  ];
-
-  return (
-    <div className="grid grid-cols-7 gap-[2px] w-[52px] h-[52px]">
-      {pattern.flat().map((v, i) => (
-        <div
-          key={i}
-          className={`rounded-[1.5px] ${
-            v ? 'bg-white/30' : 'bg-transparent'
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
-
-/* ──────────────  PASSPORT CARD  ──────────────────────────── */
-
-function PassportCard({
-  passport,
-  index,
-}: {
-  passport: CarbonPassport;
-  index: number;
-}) {
-  const sts = statusConfig[passport.status];
-  const typeCls = typeColors[passport.projectType];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.45, delay: index * 0.07, ease: 'easeOut' }}
-      whileHover={{
-        scale: 1.025,
-        boxShadow:
-          '0 0 40px rgba(16,185,129,0.12), 0 25px 50px rgba(0,0,0,0.35)',
-      }}
-      className="group relative rounded-2xl bg-gradient-to-br from-[#1E293B] to-[#0F172A] border border-white/10 overflow-hidden cursor-pointer transition-colors duration-300 hover:border-emerald-500/30"
-    >
-      {/* ── Holographic overlay ── */}
-      <div className="holographic absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-      {/* ── Shimmer line on hover ── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -inset-full top-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer" />
-      </div>
-
-      {/* ── Top strip ── */}
-      <div className="relative px-5 pt-5 pb-3 flex items-start justify-between">
-        <div className="space-y-1.5 flex-1 min-w-0">
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+            <Leaf className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Carbon Passports</h1>
+            <p className="text-sm text-gray-500">Blockchain-verified carbon credit certificates</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 w-64">
+            <Search className="w-4 h-4 text-gray-400" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search passports..." className="bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none flex-1" />
+          </div>
           <div className="flex items-center gap-2">
-            <Fingerprint className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span className="font-mono text-[11px] text-emerald-400/80 tracking-wider">
-              {passport.carbonId}
-            </span>
-          </div>
-          <h3 className="text-[15px] font-semibold text-white leading-snug truncate pr-2">
-            {passport.projectName}
-          </h3>
-        </div>
-
-        {/* Status badge */}
-        <span
-          className={`shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${sts.bg} ${sts.color}`}
-        >
-          {sts.icon}
-          {sts.label}
-        </span>
-      </div>
-
-      {/* ── Body ── */}
-      <div className="px-5 pb-5 space-y-4">
-        {/* Type + Location */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span
-            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium border ${typeCls}`}
-          >
-            <Leaf className="w-3 h-3" />
-            {passport.projectType}
-          </span>
-          <span className="inline-flex items-center gap-1 text-xs text-slate-400">
-            <MapPin className="w-3 h-3" />
-            {passport.location}
-          </span>
-        </div>
-
-        {/* ── Stats row ── */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-0.5">
-            <p className="text-[10px] uppercase tracking-wider text-slate-500">
-              Carbon Verified
-            </p>
-            <p className="text-lg font-bold text-emerald-400 leading-tight">
-              {formatNumber(passport.carbonVerified)}{' '}
-              <span className="text-[10px] font-normal text-slate-500">
-                tCO₂e
-              </span>
-            </p>
-          </div>
-          <div className="space-y-0.5">
-            <p className="text-[10px] uppercase tracking-wider text-slate-500">
-              Credits Issued
-            </p>
-            <p className="text-lg font-bold text-sky-400 leading-tight">
-              {formatNumber(passport.creditsIssued)}
-            </p>
+            <Filter className="w-4 h-4 text-gray-400" />
+            <select value={filterType} onChange={(e) => setFilterType(e.target.value)} className="px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-600 bg-white">
+              <option>All</option>
+              <option>Mangrove</option>
+              <option>Wetland</option>
+              <option>Seagrass</option>
+            </select>
           </div>
         </div>
+      </motion.div>
 
-        {/* ── Verification Score + QR ── */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <CircularScore score={passport.verificationScore} />
-            <div className="space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">
-                Verification
-              </p>
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">
-                Score
-              </p>
+      {/* Stats Row */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: "Total Passports", value: "512", icon: Leaf, color: "bg-emerald-50 text-emerald-600" },
+          { label: "Verified", value: "487", icon: CheckCircle2, color: "bg-sky-50 text-sky-600" },
+          { label: "Carbon Certified", value: "847K tCO₂", icon: TrendingUp, color: "bg-teal-50 text-teal-600" },
+          { label: "NFTs Minted", value: "512", icon: Shield, color: "bg-violet-50 text-violet-600" },
+        ].map((s, i) => (
+          <div key={i} className="p-5 rounded-2xl bg-white border border-gray-200 hover:shadow-sm transition-all">
+            <div className={`w-9 h-9 rounded-xl ${s.color} flex items-center justify-center mb-3`}>
+              <s.icon className="w-5 h-5" />
             </div>
+            <div className="text-2xl font-bold text-gray-900">{s.value}</div>
+            <div className="text-sm text-gray-500">{s.label}</div>
           </div>
-          <div className="flex flex-col items-center gap-1">
-            <QrGrid />
-            <span className="text-[8px] text-slate-600 font-mono">
-              SCAN
-            </span>
-          </div>
-        </div>
+        ))}
+      </motion.div>
 
-        {/* ── Divider ── */}
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-        {/* ── Footer meta ── */}
-        <div className="space-y-2 text-xs">
-          {/* Blockchain hash */}
-          <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-slate-500">
-              <Hash className="w-3 h-3" />
-              Blockchain
-            </span>
-            <span className="flex items-center gap-1.5 font-mono text-slate-400">
-              {passport.blockchainHash}
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-            </span>
-          </div>
-
-          {/* Owner */}
-          <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-slate-500">
-              <User className="w-3 h-3" />
-              Owner
-            </span>
-            <span className="text-slate-400 truncate max-w-[170px]">
-              {passport.owner}
-            </span>
-          </div>
-
-          {/* Issue date */}
-          <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-slate-500">
-              <CalendarDays className="w-3 h-3" />
-              Issued
-            </span>
-            <span className="text-slate-400">
-              {new Date(passport.issueDate).toLocaleDateString('en-IN', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric',
-              })}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Bottom accent bar ── */}
-      <div className="h-1 w-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-500 opacity-60 group-hover:opacity-100 transition-opacity" />
-    </motion.div>
-  );
-}
-
-/* ═══════════════════  PAGE  ══════════════════════════════════ */
-
-export default function CarbonPassportsPage() {
-  const [activeTab, setActiveTab] = useState<FilterTab>('All');
-
-  const filtered =
-    activeTab === 'All'
-      ? passports
-      : passports.filter(
-          (p) => p.status === activeTab.toLowerCase(),
-        );
-
-  /* ── Summary stats ── */
-  const totalCarbon = passports.reduce((a, p) => a + p.carbonVerified, 0);
-  const totalCredits = passports.reduce((a, p) => a + p.creditsIssued, 0);
-  const avgScore = Math.round(
-    passports.reduce((a, p) => a + p.verificationScore, 0) / passports.length,
-  );
-
-  return (
-    <div className="min-h-screen bg-[#0F172A] px-4 py-10 sm:px-8 lg:px-12">
-      <div className="mx-auto max-w-[1400px] space-y-8">
-        {/* ────────── Header ────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-2"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/25">
-              <Globe className="w-5 h-5 text-emerald-400" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white tracking-tight">
-                Carbon Passports
-              </h1>
-              <p className="text-sm text-slate-400">
-                Blockchain-verified identity for every carbon project
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ────────── Summary strip ────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4"
-        >
-          {[
-            {
-              label: 'Total Passports',
-              value: passports.length.toString(),
-              accent: 'text-white',
-              icon: <Fingerprint className="w-4 h-4 text-emerald-400" />,
-            },
-            {
-              label: 'Carbon Verified',
-              value: `${formatNumber(totalCarbon)} tCO₂e`,
-              accent: 'text-emerald-400',
-              icon: <Leaf className="w-4 h-4 text-emerald-400" />,
-            },
-            {
-              label: 'Credits Issued',
-              value: formatNumber(totalCredits),
-              accent: 'text-sky-400',
-              icon: <Coins className="w-4 h-4 text-sky-400" />,
-            },
-            {
-              label: 'Avg Verification',
-              value: `${avgScore}%`,
-              accent: 'text-cyan-400',
-              icon: <ShieldCheck className="w-4 h-4 text-cyan-400" />,
-            },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="glass rounded-xl px-4 py-3 flex items-center gap-3"
+      {/* Passport Cards */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {filtered.map((p, i) => {
+          const tc = typeColors[p.type] || typeColors.Mangrove;
+          const sc = statusConfig[p.status];
+          return (
+            <motion.div
+              key={p.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + i * 0.04, ease: "easeOut" }}
+              className="rounded-2xl bg-white border border-gray-200 overflow-hidden hover:shadow-md hover:border-gray-300 transition-all group"
             >
-              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/5">
-                {stat.icon}
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-wider text-slate-500">
-                  {stat.label}
-                </p>
-                <p className={`text-base font-semibold ${stat.accent}`}>
-                  {stat.value}
-                </p>
-              </div>
-            </div>
-          ))}
-        </motion.div>
+              {/* Gradient Header */}
+              <div className={`h-3 bg-gradient-to-r ${p.color === "emerald" ? "from-emerald-400 to-teal-400" : p.color === "sky" ? "from-sky-400 to-blue-400" : "from-teal-400 to-cyan-400"}`} />
 
-        {/* ────────── Filter Tabs ────────── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="flex items-center gap-2 flex-wrap"
-        >
-          {filterTabs.map((tab) => {
-            const isActive = activeTab === tab;
-            return (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 cursor-pointer ${
-                  isActive
-                    ? 'text-white bg-emerald-500/15 border border-emerald-500/30'
-                    : 'text-slate-400 hover:text-white bg-white/5 border border-white/5 hover:border-white/10'
-                }`}
-              >
-                {tab}
-                {tab !== 'All' && (
-                  <span
-                    className={`ml-1.5 text-xs ${
-                      isActive ? 'text-emerald-400' : 'text-slate-500'
-                    }`}
-                  >
-                    {
-                      passports.filter(
-                        (p) => p.status === tab.toLowerCase(),
-                      ).length
-                    }
+              <div className="p-5">
+                {/* Top Row */}
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <p className="text-xs font-mono text-gray-400 mb-1">{p.id}</p>
+                    <h3 className="text-base font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors">{p.project}</h3>
+                  </div>
+                  <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${sc.bg} ${sc.text}`}>
+                    {p.status === "verified" && <CheckCircle2 className="w-3 h-3" />}
+                    {p.status === "pending" && <Clock className="w-3 h-3" />}
+                    {sc.label}
                   </span>
-                )}
-              </button>
-            );
-          })}
-        </motion.div>
+                </div>
 
-        {/* ────────── Card Grid ────────── */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            {filtered.map((passport, i) => (
-              <PassportCard key={passport.id} passport={passport} index={i} />
-            ))}
+                {/* Tags */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${tc.bg} ${tc.text}`}>{p.type}</span>
+                  <span className="flex items-center gap-1 text-xs text-gray-400">
+                    <MapPin className="w-3 h-3" />{p.location}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs text-gray-400">
+                    <Calendar className="w-3 h-3" />{p.vintage}
+                  </span>
+                </div>
 
-            {filtered.length === 0 && (
-              <div className="sm:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-20 text-slate-500">
-                <ShieldCheck className="w-10 h-10 mb-3 opacity-30" />
-                <p className="text-sm">No passports match this filter.</p>
+                {/* Metrics */}
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="p-3 rounded-xl bg-gray-50 border border-gray-100">
+                    <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Carbon Verified</p>
+                    <p className="text-sm font-bold text-emerald-600">{p.carbon.toLocaleString()} tCO₂</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-gray-50 border border-gray-100">
+                    <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Health Score</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-bold text-gray-900">{p.health}%</p>
+                      <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${p.health}%` }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                  <div className="flex items-center gap-1.5">
+                    <Shield className="w-3.5 h-3.5 text-gray-400" />
+                    <span className="text-xs text-gray-400 font-mono">NFT {p.nftId}</span>
+                  </div>
+                  <button className="flex items-center gap-1 text-xs text-gray-400 hover:text-emerald-600 transition-colors">
+                    <ExternalLink className="w-3 h-3" />
+                    View on Chain
+                  </button>
+                </div>
               </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
