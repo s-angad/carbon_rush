@@ -81,7 +81,7 @@ export default function AdminPage() {
     return matchSearch && matchRole && matchStatus;
   });
 
-  if (user?.role !== "admin") {
+  if ((user?.role as string) !== "admin") {
     return (
       <div className="p-8 flex items-center justify-center min-h-[60vh]">
         <div className="text-center">

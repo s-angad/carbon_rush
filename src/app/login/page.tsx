@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Leaf, Mail, Lock, Eye, EyeOff, ArrowRight, User, ShieldCheck, Loader2, CheckCircle2 } from "lucide-react";
+import { Leaf, Mail, Lock, Eye, EyeOff, ArrowRight, User, Loader2, CheckCircle2, Building2, TreePine, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { AuthProvider, useAuth, UserRole } from "@/lib/auth";
 
@@ -11,7 +11,7 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState<UserRole>("user");
+  const [role, setRole] = useState<UserRole>("grower");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -55,11 +55,33 @@ function LoginForm() {
           setTimeout(() => router.push("/dashboard"), 500);
         }
       }
-    } catch {
-      setError("Something went wrong. Please try again.");
-      setLoading(false);
-    }
+    } catch (err) {
+  console.error("AUTH ERROR:", err);
+  setError(String(err));
+  setLoading(false);
+}
   };
+
+  const roleOptions = [
+    {
+      value: "buyer" as const,
+      label: "I am a Company / Buyer",
+      desc: "Buy carbon credits to offset emissions",
+      icon: Building2,
+    },
+    {
+      value: "grower" as const,
+      label: "I am a Tree Grower / Community",
+      desc: "I restore ecosystems and earn carbon income",
+      icon: TreePine,
+    },
+    {
+      value: "ngo_verifier" as const,
+      label: "I am an NGO / EcoClub Verifier",
+      desc: "I verify land restoration projects",
+      icon: ShieldCheck,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -122,8 +144,9 @@ function LoginForm() {
             <div className="mb-5 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
               <p className="text-sm font-medium text-emerald-800 mb-2">🔑 Demo Accounts</p>
               <div className="space-y-1">
-                <p className="text-xs text-emerald-700"><strong>Admin:</strong> admin@carbonrush.ai / admin123</p>
-                <p className="text-xs text-emerald-700"><strong>User:</strong> user@carbonrush.ai / user123</p>
+                <p className="text-xs text-emerald-700"><strong>Buyer:</strong> buyer@carbonrush.ai / buyer123</p>
+                <p className="text-xs text-emerald-700"><strong>Grower:</strong> grower@carbonrush.ai / grower123</p>
+                <p className="text-xs text-emerald-700"><strong>NGO Verifier:</strong> ngo@carbonrush.ai / ngo123</p>
               </div>
             </div>
           )}
@@ -146,7 +169,7 @@ function LoginForm() {
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Your full name"
+                    placeholder="Your full name or organization"
                     className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     required={!isLogin} />
                 </div>
@@ -180,17 +203,18 @@ function LoginForm() {
 
             {!isLogin && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Account Type</label>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { value: "user" as const, label: "User", desc: "Browse & trade credits", icon: User },
-                    { value: "admin" as const, label: "Admin", desc: "Monitor all users", icon: ShieldCheck },
-                  ].map((opt) => (
+                <label className="block text-sm font-medium text-gray-700 mb-2">I am a...</label>
+                <div className="space-y-2">
+                  {roleOptions.map((opt) => (
                     <button key={opt.value} type="button" onClick={() => setRole(opt.value)}
-                      className={`p-3 rounded-xl border-2 text-left transition-all ${role === opt.value ? "border-emerald-500 bg-emerald-50" : "border-gray-200 hover:border-gray-300"}`}>
-                      <opt.icon className={`w-5 h-5 mb-1 ${role === opt.value ? "text-emerald-600" : "text-gray-400"}`} />
-                      <div className={`text-sm font-semibold ${role === opt.value ? "text-emerald-900" : "text-gray-700"}`}>{opt.label}</div>
-                      <div className="text-xs text-gray-500">{opt.desc}</div>
+                      className={`w-full p-3.5 rounded-xl border-2 text-left transition-all flex items-center gap-3 ${role === opt.value ? "border-emerald-500 bg-emerald-50" : "border-gray-200 hover:border-gray-300"}`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${role === opt.value ? "bg-emerald-100" : "bg-gray-100"}`}>
+                        <opt.icon className={`w-5 h-5 ${role === opt.value ? "text-emerald-600" : "text-gray-400"}`} />
+                      </div>
+                      <div>
+                        <div className={`text-sm font-semibold ${role === opt.value ? "text-emerald-900" : "text-gray-700"}`}>{opt.label}</div>
+                        <div className="text-xs text-gray-500">{opt.desc}</div>
+                      </div>
                     </button>
                   ))}
                 </div>

@@ -254,3 +254,83 @@ export const smartContracts = [
     gasEstimate: "~0.006 MATIC per verification",
   },
 ];
+
+// ─── Buyer Specific Data ─────────────────────────────────────────────────────────
+export interface BuyerEmissions {
+  month: string;
+  emissions: number;
+  offset: number;
+}
+
+export const buyerEmissionsData: BuyerEmissions[] = [
+  { month: "Jan", emissions: 120, offset: 50 },
+  { month: "Feb", emissions: 130, offset: 60 },
+  { month: "Mar", emissions: 125, offset: 80 },
+  { month: "Apr", emissions: 140, offset: 100 },
+  { month: "May", emissions: 135, offset: 120 },
+  { month: "Jun", emissions: 150, offset: 150 },
+];
+
+export interface CarbonPurchase {
+  id: string;
+  date: string;
+  project: string;
+  credits: number;
+  amount: number; // in INR
+  status: "Completed" | "Pending";
+  passportId: string;
+}
+
+export const buyerPurchases: CarbonPurchase[] = [
+  { id: "PUR-001", date: "2024-05-10", project: "Sundarbans Mangrove Delta", credits: 500, amount: 1250000, status: "Completed", passportId: "CRP-00001" },
+  { id: "PUR-002", date: "2024-06-01", project: "Chilika Lake Reserve", credits: 300, amount: 660000, status: "Completed", passportId: "CRP-00004" },
+];
+
+// ─── Grower Specific Data ────────────────────────────────────────────────────────
+export interface GrowerProject {
+  id: string;
+  name: string;
+  location: string;
+  area: number;
+  trees: number;
+  status: "pending_ai_review" | "pending_ngo_review" | "verified" | "rejected";
+  date: string;
+  aiScore?: number;
+  carbonTons?: number;
+}
+
+export const growerProjects: GrowerProject[] = [
+  { id: "GP-001", name: "Sundarbans Plot A", location: "South 24 Parganas, WB", area: 15, trees: 4500, status: "verified", date: "2024-01-15", aiScore: 98, carbonTons: 320 },
+  { id: "GP-002", name: "Sundarbans Plot B", location: "South 24 Parganas, WB", area: 10, trees: 3000, status: "pending_ngo_review", date: "2024-05-20", aiScore: 94, carbonTons: 210 },
+  { id: "GP-003", name: "Sundarbans Plot C", location: "South 24 Parganas, WB", area: 5, trees: 1500, status: "pending_ai_review", date: "2024-06-10" },
+];
+
+export interface EvidenceUpload {
+  id: string;
+  projectId: string;
+  fileName: string;
+  fileType: string;
+  date: string;
+  status: "Processing" | "Verified" | "Rejected";
+}
+
+export const evidenceUploads: EvidenceUpload[] = [
+  { id: "EV-001", projectId: "GP-002", fileName: "drone_survey_1.jpg", fileType: "image/jpeg", date: "2024-05-18", status: "Verified" },
+  { id: "EV-002", projectId: "GP-002", fileName: "land_deed.pdf", fileType: "application/pdf", date: "2024-05-18", status: "Verified" },
+  { id: "EV-003", projectId: "GP-003", fileName: "planting_photos.zip", fileType: "application/zip", date: "2024-06-10", status: "Processing" },
+];
+
+export interface Payout {
+  id: string;
+  date: string;
+  amount: number;
+  method: string;
+  status: "Paid" | "Pending" | "Processing";
+  project: string;
+}
+
+export const growerPayouts: Payout[] = [
+  { id: "PAY-001", date: "2024-02-01", amount: 45000, method: "Bank Transfer (...4567)", status: "Paid", project: "Sundarbans Plot A" },
+  { id: "PAY-002", date: "2024-06-25", amount: 15000, method: "UPI (grower@ybl)", status: "Pending", project: "Sundarbans Plot B" },
+];
+
